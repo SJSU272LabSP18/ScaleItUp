@@ -10,6 +10,7 @@ Many restaurant across United States waste a lot of food on daily bases and many
 
 # Idea 2:
 
-Project Idea: Create a webapp that combines user budget with food options
+Project Idea: Create a webapp that combines user budget with food options(s)
+Testing
 
 Scenario: The user is driving home after school and is hungry for cheese burger. The user has budgeted $100 for dining out this month and he has already spent $60 on food so far. The webapp takes into account the user's current left over budget for the month, location, food choice and recommends restaurants for budget food. In this case, the webapp would factor in the $40 left over to be budgeted for food this month and take the user's current location into account and suggest the best restaurant open at this time for Cheese burgers. The webapp satisfies both the user's palette and the wallet.
