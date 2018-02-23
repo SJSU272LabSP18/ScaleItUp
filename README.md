@@ -2,10 +2,10 @@
 # Project Team 19
 
 ## Student Names: 
-Manikant Prasad 
-Megha Nair 
-Vidhya VijayaKumar 
-Aditya Chouhan 
+Manikant Prasad, 
+Megha Nair, 
+Vidhya VijayaKumar, 
+Aditya Chouhan, 
 
 ## Project Idea 1
 ### Project title: 
