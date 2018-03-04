@@ -7,6 +7,7 @@ Megha Nair,
 Vidhya VijayaKumar,
 Aditya Chouhan
 
+#### None of these approved.. submit more else I will give you my own
 
 ## Project Idea 1
 #### Project title: 
