@@ -13,6 +13,7 @@ import Nav from "./Component/mainNavigation/mainnav";
 import Tweet from "./Component/mainNavigation/tweet";
 import Signin from "./pages/signin";
 import Image from "./Component/mainNavigation/image";
+import Admin from "./Component/AdminPage/mainadmin";
 
 class App extends Component {
   render() {
@@ -25,6 +26,7 @@ class App extends Component {
           <Route exact path="/tweet" component={Tweet}/>
           <Route exact path="/signin" component={Signin}/>
           <Route exact path="/image" component={Image}/>
+          <Route exact path="/admin" component={Admin}/>
         </div>
       </Router>
     );
