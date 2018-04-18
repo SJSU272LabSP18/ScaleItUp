@@ -4,29 +4,28 @@ import Nav from "./mainnav";
 //import Request from 'superagent';
 //var $ = require('jquery');
 //var Client = require('node-rest-client').Client;
-import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
-const columns = ["_id", "tweet"];
+const baseURL = 'http://localhost:5000'
 var products = [{
-  "tweet": "Item name 1",
-  _id: 1,
-  "done": "100"
+  tweet: "Item name 1",
+  id: 1,
+  image: "https://drive.google.com/uc?id=1xRoU-q4v48z9GlsrmsHIOkU59kHSkZ7e"
 }, {
-  "tweet": "Item name 2",
-  _id: 2,
-  "done": "100"
+  tweet: "Item name 2",
+  id: 2,
+  image: "https://drive.google.com/uc?id=1QsCLwHjTwhg6hwB2WeKO4-9WYrcuUBAQ"
 }];
-
-//var client = new Client();
 class Image extends Component {
   constructor() {
     super()
     this.state = {
+      pyImage: [],
+      message : []
     }
+    //this.postTweet = this.postTweet.bind(this)
   }
   componentWillMount() {
-    console.log("fetching python tweet localhost");
-    fetch('http://localhost:5000/get', {
+    fetch(baseURL + '/image/get', {
       method: 'GET',
       mode: 'cors',
       dataType: 'json',
@@ -40,14 +39,48 @@ class Image extends Component {
       )
       .then(r => {
         console.log(r)
-        console.log(products)
         this.setState({
-          pyResp: r
+          pyImage: r,
         })
       })
       .catch(err => console.log(err))
   }
 
+  postTweet(el) {
+    //console.log(this.document.getElementById("id"));
+    console.log(el)
+    var fImage = this.state.pyImage[el-1]["image"];
+    var fBlurb = this.state.pyImage[el-1]["tweet"];
+    var data = { "name": "manikantbit", "tweet": fBlurb, "image": fImage};
+    data = JSON.stringify(data);
+    console.log(data);
+    fetch(baseURL+'/image/tweet', {
+      method: 'POST',
+      mode: 'cors',
+      body: data,
+      dataType: 'json',
+      headers: ({
+        "Access-Control-Allow-Origin": "*",
+        'Content-Type': "application/json"
+      })
+    })
+      .then(r => r.json())
+      .then(r => Array.from(Object.keys(r), k => r[k])
+      )
+      .then(r => {
+         this.setState({
+          message: r
+        })
+      })
+      .catch(err => console.log(err))
+      .then( r => {if(this.state.message[0] != "") {
+        alert(this.state.message[0])
+      } else if(this.state.message[1]!="") {
+        alert(this.state.message[1])
+      }}) 
+  }
+  
+ 
   render() {
     const options = {
       page: 1,  // which page you want to show as default
@@ -68,30 +101,45 @@ class Image extends Component {
       paginationShowsTotal: this.renderShowsTotal,
       paginationPosition: 'top'
     };
-
+    function myFunction(button) {
+      var x = document.getElementById("p");
+      if (x.contenteditable == "true") {
+        x.contentEditable = "false";
+        button.innerHTML = "Edit";
+      } else {
+        x.contentEditable = "true";
+        button.innerHTML = "Disable";
+      }
+    }
+    let it = this.state.pyImage.map((product) => {
+      return (<div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+        <div className="thumbnail">
+          <img src={product.image} alt="Responsive image"></img>
+          <div className="caption">
+            <p id='p' contenteditable="true">{product.tweet}</p>
+            <button onClick="{myFunction()}">Disable content of p to be editable!</button>
+            <div className="text-center">
+            <button id ={product.id} className='btn btn-info' onClick={() => this.postTweet(product.id)} >Tweet</button>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+      )
+    })
     return (
       <div className='container'>
         <Nav />
         <div className="text-center">
           <h1 text-align='center'>Images & Blurbs</h1>
-
           <div className="row">
-            <div className="col-lg-3 col-md-3 col-sm-3 col-xs-3">
-              <div className="thumbnail">
-                <img src="/logo.svg" alt="..."></img>
-                  <div className="caption">
-                    <h3>Scenery</h3>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-                    <p><a href="#" className="btn btn-primary" role="button">Tweet</a></p>
-                  </div>
-                
-              </div>
-            </div>
+            {it}
           </div>
         </div>
       </div>
-        )
-      }
-  } 
-      
-    export default Image;
+
+    )
+  }
+}
+
+export default Image;

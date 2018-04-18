@@ -11,9 +11,8 @@ class Header extends Component {
 	render() {
 		return (
 			<nav className="navbar navbar-toggleable-md">
-				<button className="navbar-toggle-collapsed p-0 border-0" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation"
-				data-target='#bs-example-navbar-collapse-1'>
-					<span className="navbar-toggler-icon"></span>
+				<button className="navbar-toggle-collapsed p-0 border-0" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+					
 				</button>
 				<div className="container">
 					<Link className="navbar-brand" to="/">Promos</Link>

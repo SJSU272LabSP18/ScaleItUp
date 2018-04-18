@@ -27,6 +27,9 @@ class Nav extends Component {
 							<li className="nav-item">
 								<Link className="nav-link" to="/image">Blurbs & Images</Link>
 							</li>
+							<li className="nav-item">
+								<Link className="nav-link" to="/retweet">Retweet</Link>
+							</li>
 						</ul>
 						<ul className="navbar-nav ml-auto">
 						<li className="nav-item">

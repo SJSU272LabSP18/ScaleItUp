@@ -3,12 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "bootstrap": "^4.0.0",
+    "bootstrap": "^4.1.0",
     "html-react-parser": "^0.4.3",
     "react": "^16.3.1",
     "react-bootstrap": "^0.32.1",
     "react-bootstrap-table": "^4.3.1",
     "react-dom": "^16.3.1",
+    "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.4",
     "react-twitter-auth": "0.0.11"
   },

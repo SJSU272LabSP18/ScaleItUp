@@ -14,6 +14,7 @@ import Tweet from "./Component/mainNavigation/tweet";
 import Signin from "./pages/signin";
 import Image from "./Component/mainNavigation/image";
 import Admin from "./Component/AdminPage/mainadmin";
+import Retweet from "./Component/mainNavigation/retweet";
 
 class App extends Component {
   render() {
@@ -27,6 +28,7 @@ class App extends Component {
           <Route exact path="/signin" component={Signin}/>
           <Route exact path="/image" component={Image}/>
           <Route exact path="/admin" component={Admin}/>
+          <Route exact path="/retweet" component={Retweet}/>
         </div>
       </Router>
     );

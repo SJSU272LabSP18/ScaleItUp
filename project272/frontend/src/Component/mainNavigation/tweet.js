@@ -7,11 +7,7 @@ import Nav from "./mainnav";
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
 
-const lists = [
-  "tweet1",
-  "tweet2",
-  "tweet3"
-];
+const BaseURL = 'http://localhost:5000'
 const columns = ["_id", "tweet"];
 var products = [{
   "tweet": "Item name 1",
@@ -39,8 +35,7 @@ class Tweet extends Component {
     this.getSelectedRowKeys = this.getSelectedRowKeys.bind(this)
   }
   componentWillMount() {
-    console.log("fetching python tweet localhost");
-    fetch('http://localhost:5000/get', {
+    fetch(BaseURL+'/get', {
       method: 'GET',
       mode: 'cors',
       dataType: 'json',
@@ -54,7 +49,6 @@ class Tweet extends Component {
       )
       .then(r => {
         console.log(r)
-        console.log(products)
         this.setState({
           pyResp: r
         })
@@ -102,11 +96,7 @@ class Tweet extends Component {
     bgColor: 'blue'
   };
   afterSearch(searchText, result) {
-    console.log('Your search text is ' + searchText);
-    console.log('Result is:');
-    for (let i = 0; i < result.length; i++) {
-      console.log('Fruit: ' + result[i].id + ', ' + result[i].name + ', ' + result[i].price);
-    }
+    console.log('Your search text is ' + searchText);    
   }
 
   options = {
@@ -120,7 +110,7 @@ class Tweet extends Component {
     var data = { "name": "manikantbit", "tweet": fBlurb };
     data = JSON.stringify(data);
     console.log(data);
-    fetch('http://localhost:5000/tweet', {
+    fetch(BaseURL+'/tweet', {
       method: 'POST',
       mode: 'cors',
       body: data,
