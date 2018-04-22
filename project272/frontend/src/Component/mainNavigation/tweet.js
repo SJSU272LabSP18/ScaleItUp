@@ -1,25 +1,11 @@
 import React, { Component } from 'react';
 import ReactDOM from "react-dom"
 import Nav from "./mainnav";
-//import Request from 'superagent';
-//var $ = require('jquery');
-//var Client = require('node-rest-client').Client;
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import Notifications, {notify} from 'react-notify-toast';
 
 
 const BaseURL = 'http://localhost:5000'
-const columns = ["_id", "tweet"];
-var products = [{
-  "tweet": "Item name 1",
-  _id: 1,
-  "done": "100"
-}, {
-  "tweet": "Item name 2",
-  _id: 2,
-  "done": "100"
-}];
-
-//var client = new Client();
 class Tweet extends Component {
   constructor() {
     super()
@@ -30,8 +16,6 @@ class Tweet extends Component {
       selected: [],
       message: []
     }
-    this.getSearch = this.getSearch.bind(this)
-    //this.test=this.test.bind(this)
     this.getSelectedRowKeys = this.getSelectedRowKeys.bind(this)
   }
   componentWillMount() {
@@ -55,27 +39,7 @@ class Tweet extends Component {
       })
       .catch(err => console.log(err))
   }
-  getSearch(e) {
-    e.preventDefault();
-    fetch('http://localhost:5000/search', {
-      method: 'GET',
-      mode: 'cors',
-      dataType: 'json',
-      headers: ({
-        "Access-Control-Allow-Origin": "*",
-        'Content-Type': "application/json"
-      })
-    })
-      .then(r => r.json())
-      //.then(r=> r.toArray())
-      .then(r => {
-        console.log(r)
-        this.setState({
-          searchPy: r
-        })
-      })
-      .catch(err => console.log(err))
-  }
+  
 
   onRowSelect(row, isSelected, e) {
     // maybe some validation here
@@ -105,7 +69,6 @@ class Tweet extends Component {
   getSelectedRowKeys(row, isSelected, e) {
     // I think this answers your questions
     var blurb = this.refs.table.state.selectedRowKeys;
-    console.log(this.state.pyResp[blurb - 1]["tweet"]);
     var fBlurb = this.state.pyResp[blurb - 1]["tweet"];
     var data = { "name": "manikantbit", "tweet": fBlurb };
     data = JSON.stringify(data);
@@ -130,9 +93,9 @@ class Tweet extends Component {
       })
       .catch(err => console.log(err))
       .then( r => {if(this.state.message[0] != "") {
-        alert(this.state.message[0])
+        notify.show(this.state.message[0], "error", 5000,"#008000")
       } else if(this.state.message[1]!="") {
-        alert(this.state.message[1])
+        notify.show(this.state.message[1], "success", 5000,"#FF0000")
       }}) 
   }
   render() {
@@ -143,7 +106,7 @@ class Tweet extends Component {
       }, {
         text: '10', value: 10
       }, {
-        text: 'All', value: products.length
+        text: 'All', value: this.state.pyResp.length
       }], // you can change the dropdown list for size per page
       sizePerPage: 10,  // which size per page you want to locate as default
       pageStartIndex: 1, // where to start counting the pages
@@ -154,18 +117,15 @@ class Tweet extends Component {
       lastPage: 'Last',
       paginationShowsTotal: this.renderShowsTotal,
       paginationPosition: 'top'
-    };      
-    
+    };    
     return (
       <div className='container'>
         <Nav />
         <div className="text-center">
           <h1 text-align='center'>Blurbs</h1>
-        </div>
-        <div id = {(this.state.message[0]!="")?
-        <div className='alert alert-success'>{this.state.message[0]}</div> :
-        <div className='alert alert-danger'>error {this.state.message[1]}</div>}>
-       </div>
+        </div>    
+        <div>
+          <Notifications/>
         <BootstrapTable ref='table' data={this.state.pyResp} selectRow={this.selectRowProp} search={true} pagination={true} options={options} version='4' cellEdit={this.cellEditProp}>
           <TableHeaderColumn dataField="_id" isKey={true} dataAlign="left" width="70px" dataSort={true}>ID</TableHeaderColumn>
           <TableHeaderColumn dataField="tweet" dataSort={true} width="300px">Blurbs</TableHeaderColumn>
@@ -174,8 +134,8 @@ class Tweet extends Component {
         <div className="text-center">
           <button id ='butTweet' className='btn btn-info' onClick={this.getSelectedRowKeys} >Tweet</button>
         </div>
-      </div>
-      
+        </div>
+     </div>
     )
   }
 }

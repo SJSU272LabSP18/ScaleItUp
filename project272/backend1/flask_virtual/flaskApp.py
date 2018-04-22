@@ -196,9 +196,9 @@ def retweet():
     twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
     #ReTweeting by ID of the Tweet
     try:
-        twitter.retweet(id = "985108650409775106",status='Python fan')
+        twitter.retweet(id = "985108650409775106")
     except TwythonError as e:
         return json.dumps(e)
-    return json.dumps("Retweeted Sucessfully")
+    return json.dumps("Retweeted Successfully")
 if __name__ == "__main__":
     app.run()
