@@ -1,0 +1,18 @@
+.navbar {
+  background: rgb(91, 85, 129);
+}
+
+
+
+.navbar-brand {
+    color:white;
+}
+  
+  a {
+    color: white;
+    font-weight: 200;
+  }
+.nav-link{
+  color: white;
+  font-weight: 200;
+}
