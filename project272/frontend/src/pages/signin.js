@@ -1,55 +1,61 @@
 import React, { Component } from 'react';
 import Footer from '../Component/footerComponent/footer';
 import Header from '../Component/headerComponent/header';
-import TwitterLogin from 'react-twitter-auth';
+//import TwitterLogin from 'react-twitter-auth';
+import {Redirect } from 'react-router-dom';
+import Notifications, { notify } from 'react-notify-toast';
 
-const url = 'http://localhost:5000';
+const baseURL = 'http://localhost:5000';
 class Signin extends Component {
-constructor() {
-    super();
-    this.state = { isAuthenticated: false, user: null, token: ''};
-}
-
-onSuccess = (response) => {
-    const token = response.headers.get('x-auth-token');
-    response.json().then(user => {
-      if (token) {
-        this.setState({isAuthenticated: true, user: user, token: token});
-      }
-    });
-  };
-  
-  onFailed = (error) => {
-    alert(error);
-  }; 
-  logout = () => {
-    this.setState({isAuthenticated: false, token: '', user: null})
-  };
-render(){
-    let content = !!this.state.isAuthenticated ?
-    (
-      <div>
-        <p>Authenticated</p>
-        <div>
-          {this.state.user.email}
-        </div>
-        <div>
-          <button onClick={this.logout} className="button" >
-            Log out
-          </button>
-        </div>
-      </div>
-    ) :
-    (
-      <TwitterLogin loginUrl= 'https://api.twitter.com/oauth/authenticate'
-                    onFailure={this.onFailed} onSuccess={this.onSuccess}
-                    requestTokenUrl="http://localhost:5000/twitter/reverse"/>
-    );
+  constructor() {
+		super()
+		this.getURLParameter = this.getURLParameter.bind(this)
+		this.parse_query_string = this.parse_query_string.bind(this)
+  }
+  componentDidMount() {
+      this.getURLParameter('error')
+  }
+  getURLParameter(name) {
+		var query = window.location.search.substring(1);
+		console.log(query)
+    var qs = this.parse_query_string(query);
+    var err = qs.error
+    console.log(typeof(err))
+    if (query != '' && name =='error'){
+			notify.show(err, "error", 5000,"#008000")
+    }
+  }
+  parse_query_string(query) {
+		var vars = query.split("&");
+		var query_string = {};
+		for (var i = 0; i < vars.length; i++) {
+			var pair = vars[i].split("=");
+			// If first entry with this name
+			if (typeof query_string[pair[0]] === "undefined") {
+				query_string[pair[0]] = decodeURIComponent(pair[1]);
+				// If second entry with this name
+			} else if (typeof query_string[pair[0]] === "string") {
+				var arr = [query_string[pair[0]], decodeURIComponent(pair[1])];
+				query_string[pair[0]] = arr;
+				// If third or later entry with this name
+			} else {
+				query_string[pair[0]].push(decodeURIComponent(pair[1]));
+			}
+		}
+		return query_string;
+	}
+render() {
   return (
     <div className="Signin">
+    <Notifications />
+     <div className="container">
       <Header />
-      {content}
-      <Footer />
+       <div className="jumbotron text-center">
+        <h1><span className="fa fa-lock"></span> Employee Login with Twitter</h1>
+        <p>Please Login via Button Below</p>
+        <a href= {baseURL+'/login'} className="btn btn-info"><span className="fa fa-twitter"></span> Twitter</a>
+    </div>
+    </div>
     </div>
   );
 }

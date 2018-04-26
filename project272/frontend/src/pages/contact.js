@@ -7,9 +7,17 @@ class Contact extends Component {
     return (
       <div className="container">
       <Header />
-       	<h1>Contact Us</h1>
+      <div className='jumbotron text-center'>
+      
+      <h1><span class="fa fa-lock"></span> Contact Us</h1>
+        <p>Aditya Chouhan</p>
 	      <p>Manikant Prasad</p>
-      <Footer />	
+        <p>Megha Nair</p>
+        <p>Vidhya</p>   
+     </div>
+     <div className ='text-center'>
+     <Footer />
+     </div>
      </div>
     );
   }
