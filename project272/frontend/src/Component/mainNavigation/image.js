@@ -9,9 +9,13 @@ class Image extends Component {
     super()
     this.state = {
       pyImage: [],
-      message : []
+      message : [],
+      value: ""
     }
-    //this.postTweet = this.postTweet.bind(this)
+    this.handleChange = this.handleChange.bind(this);
+  }
+  handleChange(event) {
+    this.setState({ value : event.target.value });
   }
   componentWillMount() {
     fetch(baseURL + '/image/get', {
@@ -108,13 +112,12 @@ class Image extends Component {
         <div className="thumbnail">
           <img src={product.image} alt="Responsive image" className = "img-fluid rounded"></img>
           <div className="caption">
-            <p id='p' contenteditable="true">{product.tweet}</p>
+            <p id='p' contentEditable="true" value= {product.tweet} onChange={this.handleChange}>{product.tweet}</p>
             <div className="text-center">
             <button id ={product.id} className='btn btn-info' onClick={() => this.postTweet(product.id)} >Tweet</button>
             </div>
          </div>
          </div>
-       
       </div>
       </div>    
           </div>

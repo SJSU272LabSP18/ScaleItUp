@@ -11,7 +11,7 @@ class Homepage extends Component {
       <Header />
       <div className='jumbotron'>
         
-        <h1> Welcome to Home Page </h1>
+        <h1> Welcome to Promos - A Social App for Twitter </h1>
         <p>This is a page for businesses who want to promote their product in social media app.</p>
       </div>
       <Footer /> 

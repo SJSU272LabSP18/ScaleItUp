@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ReactDOM from "react-dom"
 import Nav from "./mainnav";
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
-import Notifications, {notify} from 'react-notify-toast';
+import Notifications, { notify } from 'react-notify-toast';
 
 
 const BaseURL = 'http://localhost:5000'
@@ -19,7 +19,7 @@ class Tweet extends Component {
     this.getSelectedRowKeys = this.getSelectedRowKeys.bind(this)
   }
   componentWillMount() {
-    fetch(BaseURL+'/get', {
+    fetch(BaseURL + '/get', {
       method: 'GET',
       mode: 'cors',
       dataType: 'json',
@@ -39,7 +39,7 @@ class Tweet extends Component {
       })
       .catch(err => console.log(err))
   }
-  
+
 
   onRowSelect(row, isSelected, e) {
     // maybe some validation here
@@ -60,43 +60,50 @@ class Tweet extends Component {
     bgColor: 'blue'
   };
   afterSearch(searchText, result) {
-    console.log('Your search text is ' + searchText);    
+    console.log('Your search text is ' + searchText);
   }
 
   options = {
     afterSearch: this.afterSearch  // define a after search hook
   };
   getSelectedRowKeys(row, isSelected, e) {
-    // I think this answers your questions
-    var blurb = this.refs.table.state.selectedRowKeys;
-    var fBlurb = this.state.pyResp[blurb - 1]["tweet"];
-    var data = { "name": "manikantbit", "tweet": fBlurb };
-    data = JSON.stringify(data);
-    console.log(data);
-    fetch(BaseURL+'/tweet', {
-      method: 'POST',
-      mode: 'cors',
-      body: data,
-      dataType: 'json',
-      headers: ({
-        "Access-Control-Allow-Origin": "*",
-        'Content-Type': "application/json"
-      })
-    })
-      .then(r => r.json())
-      .then(r => Array.from(Object.keys(r), k => r[k])
-      )
-      .then(r => {
-         this.setState({
-          message: r
+    var username = localStorage.getItem('username')
+    //console.log(username)
+    if (username != '') {
+      var blurb = this.refs.table.state.selectedRowKeys;
+      var fBlurb = this.state.pyResp[blurb - 1]["tweet"];
+      var data = { "username": username, "tweet": fBlurb };
+      data = JSON.stringify(data);
+      console.log(data);
+      fetch(BaseURL + '/tweet', {
+        method: 'POST',
+        mode: 'cors',
+        body: data,
+        dataType: 'json',
+        headers: ({
+          "Access-Control-Allow-Origin": "*",
+          'Content-Type': "application/json"
         })
       })
-      .catch(err => console.log(err))
-      .then( r => {if(this.state.message[0] != "") {
-        notify.show(this.state.message[0], "error", 5000,"#008000")
-      } else if(this.state.message[1]!="") {
-        notify.show(this.state.message[1], "success", 5000,"#FF0000")
-      }}) 
+        .then(r => r.json())
+        .then(r => Array.from(Object.keys(r), k => r[k])
+        )
+        .then(r => {
+          this.setState({
+            message: r
+          })
+        })
+        .catch(err => console.log(err))
+        .then(r => {
+          if (this.state.message[0] != "") {
+            notify.show(this.state.message[0], "success", 5000, "#008000")
+          } else if (this.state.message[1] != "") {
+            notify.show(this.state.message[1], "error", 5000, "#FF0000")
+          }
+        })
+    }else{
+      notify.show('Invalid Session! Please reauthenticate your Twitter Account','error',5000,"#008000")
+    }
   }
   render() {
     const options = {
@@ -117,25 +124,26 @@ class Tweet extends Component {
       lastPage: 'Last',
       paginationShowsTotal: this.renderShowsTotal,
       paginationPosition: 'top'
-    };    
+    };
     return (
       <div className='container'>
         <Nav />
         <div className="text-center">
           <h1 text-align='center'>Blurbs</h1>
-        </div>    
+        </div>
         <div>
-          <Notifications/>
-        <BootstrapTable ref='table' data={this.state.pyResp} selectRow={this.selectRowProp} search={true} pagination={true} options={options} version='4' cellEdit={this.cellEditProp}>
-          <TableHeaderColumn dataField="_id" isKey={true} dataAlign="left" width="70px" dataSort={true}>ID</TableHeaderColumn>
-          <TableHeaderColumn dataField="tweet" dataSort={true} width="300px">Blurbs</TableHeaderColumn>
-        </BootstrapTable>
+          <Notifications />
+          <BootstrapTable ref='table' data={this.state.pyResp} selectRow={this.selectRowProp} search={true} pagination={true} options={options} version='4' cellEdit={this.cellEditProp}>
+            <TableHeaderColumn dataField="_id" isKey={true} dataAlign="left" width="70px" dataSort={true}>ID</TableHeaderColumn>
+            <TableHeaderColumn dataField="tweet" dataSort={true} width="300px">Blurbs</TableHeaderColumn>
+          </BootstrapTable>
 
-        <div className="text-center">
-          <button id ='butTweet' className='btn btn-info' onClick={this.getSelectedRowKeys} >Tweet</button>
+          <div className="text-center">
+            <button id='butTweet' className='btn btn-info' onClick={this.getSelectedRowKeys} >Tweet</button>
+          </div>
         </div>
-        </div>
-     </div>
+      </div>
+
     )
   }
 }

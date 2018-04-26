@@ -15,20 +15,20 @@ class Header extends Component {
 					
 				</button>
 				<div className="container">
-					<Link className="navbar-brand" to="/">Promos</Link>
+					<h2 className="navbar-brand">Promos</h2>
 					<div className="navbar-collapse offcanvas-collapse" id="navbarCollapse">
 						<ul className="navbar-nav mr-auto">
 							<li className="nav-item active">
 								<Link className="nav-link" to="/">Home <span className="sr-only">(current)</span></Link>
 							</li>
 							<li className="nav-item">
-								<Link className="nav-link" to="/contact">Contact</Link>
+								<Link className="nav-link" to="/about">About</Link>
 							</li>
 							
 						</ul>
 						<ul className="navbar-nav ml-auto">
 						<li className="nav-item">
-								<Link className="nav-link" to="/home">Sign In</Link>
+								<Link className="nav-link" to="/signin">Sign In</Link>
 							</li>
 						</ul>
 					</div>

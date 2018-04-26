@@ -1,4 +1,4 @@
-from flask import Flask, request, json, redirect, url_for
+from flask import Flask, request, json, redirect, url_for,session
 from twython import Twython, TwythonError
 from flask.json import jsonify
 import sys
@@ -8,6 +8,9 @@ from flask import Response
 from flask_pymongo import PyMongo
 from pymongo import MongoClient
 from datetime import datetime
+import requests
+from requests.auth import HTTPBasicAuth
+from requests_oauthlib import OAuth1, OAuth2
 #from flask_mongoalchemy import MongoAlchemy
 from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
 from flask_login import UserMixin, current_user, LoginManager, login_required, login_user, logout_user
@@ -44,61 +47,55 @@ APP_KEY = 'WnUaOLVCM1jsKqJdMoVbW6VjC'
 APP_SECRET = 'jLSrda1SoS9yaS2G8QBTjmA3nERxhxFEYaXWIwrqKAfuE0w6qO'
 OAUTH_TOKEN = '956698844267335680-wB3tLAOxJYanZUa5YbsBIo318OaFMRP'
 OAUTH_TOKEN_SECRET = 'W6GbC0ABA9OWfjnCjbVJbJyUWWqwgCgn8d2rtaX3k3eP6'
-"""class User(db.Document):
-    id = db.IntField()
-    username = db.StringField()
+err_msg = "Invalid Login Session! Please login again"
+msg = "Tweeted Successfully"
+info = []
 
-class OAuth(db.Document):
-    user_id = db.IntField()
-    provider = db.StringField()
-    token= db.StringField()
-    created_at = db.StringField()
-twitter_blueprint = make_twitter_blueprint(api_key='WnUaOLVCM1jsKqJdMoVbW6VjC', api_secret='jLSrda1SoS9yaS2G8QBTjmA3nERxhxFEYaXWIwrqKAfuE0w6qO')
-app.register_blueprint(twitter_blueprint, url_prefix='/twitter_login')
-login_manager = LoginManager(app)
+@app.route('/login')
+def login():
+    twitter = Twython(APP_KEY, APP_SECRET)
+    auth = twitter.get_authentication_tokens(callback_url='http://localhost:5000/callback',screen_name='')
+    session['oauth_token'] = auth['oauth_token']
+    session['oauth_token_secret'] = auth['oauth_token_secret']
+    return redirect(auth['auth_url'])
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
-twitter_blueprint.backend = MongoAlchemyBackend(OAuth, db.session, user=current_user)
-@app.route('/twitter')
-def twitter_login():
-    #if not twitter.authorized:
-    return redirect(url_for('twitter.login'))
-    account_info = twitter.get('account/settings.json')
-    if account_info.ok:
-        account_info_json = account_info.json()
-            
-    return '<h1>Your Twitter name is @{}'.format(account_info_json['screen_name'])
+@app.route('/callback')
+def callback():
+    is_denied = request.values.get('denied')
+    if is_denied:
+        return redirect('http://localhost:3000/signin'+'?error=Login Failed')
+    oauth_verifier = request.values.get('oauth_verifier')
+    if not oauth_verifier:
+        return redirect('http://localhost:3000/signin'+'?error=Login Failed')
 
-@oauth_authorized.connect_via(twitter_blueprint)
-def twitter_logged_in(blueprint, token):
-    account_info = blueprint.session.get('account/settings.json')
+    twitter = Twython(APP_KEY, APP_SECRET,
+                      session['oauth_token'], session['oauth_token_secret'])
 
-    if account_info.ok:
-        account_info_json = account_info.json()
-        username = account_info_json['screen_name']
-        #user = db.user_twitter.find({"_id" :"$username"}) 
-        user = User.query.filter(username==username).first()
-        if not user:
-            #db.user_twitter.insert({"_id" :"{$username}",'oauth': '$'})
-            user = User(username = username)
-            db.session.add(user)
-            user.save() 
-            db.session.commit()
-        login_user(username)
+    final_step = twitter.get_authorized_tokens(oauth_verifier)
 
-@app.route('/')
-@login_required
-def index():
-    return '<h1>You are logged in as {}</h1>'.format(current_user.username)
+    # store these permanently in database
+    OAUTH_TOKEN = final_step['oauth_token']
+    OAUTH_TOKEN_SECRET = final_step['oauth_token_secret']
 
-@app.route('/logout')
-@login_required
+    # get user credential
+    twitter = Twython(APP_KEY, APP_SECRET,
+                       OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
+    userDetail = twitter.verify_credentials()
+    userid = userDetail['id_str']
+    username= userDetail['screen_name']
+    name = userDetail['name']
+    result= db.twitter_user.find({userid : userid})
+    if result:
+        db.twitter_user.update_one({'userid':userid},{'$set':{'username':username,'name':name,'lastlogin':datetime.now(),'oauth_token':OAUTH_TOKEN,'oauth_secret':OAUTH_TOKEN_SECRET}},upsert=True)
+    else:
+        db.twitter_user.insert({'userid':userid,'username':username,'name':name,'lastlogin':datetime.now(),'oauth_token':OAUTH_TOKEN,'oauth_secret':OAUTH_TOKEN_SECRET})
+    return redirect('http://localhost:3000/dashboard?'+'username='+username+'&name='+name)
+
+@app.route('/logout',methods=['DELETE'])
 def logout():
-    logout_user()
-    return redirect(url_for('index'))"""
-
+    userid = request.json['username']
+    db.twitter_user.delete_one({'username':userid})
+    return json.dumps({'msg':'success'})
 
 @app.route('/insert')
 def insert_data():
@@ -124,15 +121,23 @@ def get_data():
 
 @app.route('/tweet', methods=['POST'])
 def tweet():
-    twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
-    msg = "Tweeted Successfully"
-    try:
-        twitter.update_status(status=request.json["tweet"])
-
-        #     search_results = twitter.search(q='#python', count=50)
-    except TwythonError as e:
-        return json.dumps({"msg": "", "err": str(e)})
-    return json.dumps({"msg": msg, "err": ""})
+    username = request.json['username']
+    tweet = request.json['tweet']
+    userDB = db.twitter_user.find({'username':username})   
+    if userDB.count()>0:
+        data = list()
+        for i,d in enumerate(userDB):
+            data.append(d['oauth_token'])
+            data.append(d['oauth_secret'])
+        twitter = Twython(APP_KEY, APP_SECRET, data[0],data[1])
+        try:
+            twitter.update_status(status=tweet)
+        except TwythonError as e:
+            return json.dumps({"msg": "", "err": str(e)})
+        db.user_tweets.insert({'username':username,'tweet':tweet,'createdat':datetime.now()})
+        return json.dumps({"msg": msg, "err": ""})
+    else:
+        return json.dumps({"msg": "", "err": err_msg })
 
 
 @app.route('/search')
