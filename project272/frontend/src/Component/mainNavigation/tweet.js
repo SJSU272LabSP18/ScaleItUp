@@ -4,8 +4,8 @@ import Nav from "./mainnav";
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import Notifications, { notify } from 'react-notify-toast';
 
+var config = require('./config');
 
-const BaseURL = 'http://localhost:5000'
 class Tweet extends Component {
   constructor() {
     super()
@@ -19,7 +19,7 @@ class Tweet extends Component {
     this.getSelectedRowKeys = this.getSelectedRowKeys.bind(this)
   }
   componentWillMount() {
-    fetch(BaseURL + '/get', {
+    fetch(config.baseURL + '/get', {
       method: 'GET',
       mode: 'cors',
       dataType: 'json',
@@ -75,7 +75,7 @@ class Tweet extends Component {
       var data = { "username": username, "tweet": fBlurb };
       data = JSON.stringify(data);
       console.log(data);
-      fetch(BaseURL + '/tweet', {
+      fetch(config.baseURL + '/tweet', {
         method: 'POST',
         mode: 'cors',
         body: data,
@@ -96,9 +96,9 @@ class Tweet extends Component {
         .catch(err => console.log(err))
         .then(r => {
           if (this.state.message[0] != "") {
-            notify.show(this.state.message[0], "success", 5000, "#008000")
+            notify.show(this.state.message[0], "error", 5000, "#008000")
           } else if (this.state.message[1] != "") {
-            notify.show(this.state.message[1], "error", 5000, "#FF0000")
+            notify.show(this.state.message[1], "success", 5000, "#FF0000")
           }
         })
     }else{
@@ -139,7 +139,7 @@ class Tweet extends Component {
           </BootstrapTable>
 
           <div className="text-center">
-            <button id='butTweet' className='btn btn-info' onClick={this.getSelectedRowKeys} >Tweet</button>
+            <button id='butTweet' className='btn btn-info' onClick={this.getSelectedRowKeys} ><span className="fa fa-twitter"></span>Tweet</button>
           </div>
         </div>
       </div>

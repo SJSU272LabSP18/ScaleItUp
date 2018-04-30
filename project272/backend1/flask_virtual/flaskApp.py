@@ -146,18 +146,22 @@ def search():
     twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
     param1 = request.args.get('q')
     param2 = urllib.parse.unquote(param1)
+    query = str(param2)+' -filter:retweets AND -filter:replies'
+    i = 1
     try:
-        search_results = twitter.search(q=str(param2), count=10)
+        search_results = twitter.search(q=query, count=10)
     except IOError as e:
         print(e)
     for tweet in search_results['statuses']:
-        jList.append({"id": tweet['id'] ,
+        jList.append({"id":i ,
+                      "id_tweet": tweet['id'] ,
                       "avatar": tweet['user']["profile_image_url"], 
                       "author": tweet['user']['name'],    
                       "user": tweet['user']['screen_name'],
                       "createdat": tweet['created_at'],
-                      "text": tweet['text']})
-    #jList=str(jList)
+                      "text": tweet['text'],
+                      'status':tweet['retweeted']})
+        i = i+1
     return json.dumps(jList)
 
 @app.route('/image/upload')
@@ -178,32 +182,67 @@ def getImage():
 
 @app.route('/image/tweet',methods=['POST'])
 def tweetImage():
-    response = requests.get(request.json['image'])
-    photo = Image.open(BytesIO(response.content))
-    basewidth = 320
-    wpercent = (basewidth / float(photo.size[0]))
-    height = int((float(photo.size[1]) * float(wpercent)))
-    photo = photo.resize((basewidth, height), Image.ANTIALIAS)
-    msg = "Tweeted Successfully"
-    twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
-    image_io = io.BytesIO()  #StringIO()
-    photo.save(image_io, format='JPEG')
-    image_io.seek(0)
-    try:
-        response = twitter.upload_media(media=image_io)
-        twitter.update_status(status=request.json["tweet"],media_ids=[response['media_id']])
-    except TwythonError as e:
-        return json.dumps({"msg": "", "err": str(e)})
-    return json.dumps({"msg": msg, "err": ""})
+    username = request.json['username']
+    tweet = request.json['tweet']
+    image = request.json['image']
+    userDB = db.twitter_user.find({'username':username})   
+    if userDB.count()>0:
+        data = list()
+        for i,d in enumerate(userDB):
+            data.append(d['oauth_token'])
+            data.append(d['oauth_secret'])
+        twitter = Twython(APP_KEY, APP_SECRET, data[0],data[1])
+        response = requests.get(request.json['image'])
+        photo = Image.open(BytesIO(response.content))
+        basewidth = 320
+        wpercent = (basewidth / float(photo.size[0]))
+        height = int((float(photo.size[1]) * float(wpercent)))
+        photo = photo.resize((basewidth, height), Image.ANTIALIAS)
+        #msg = "Tweeted Successfully"
+        #twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
+        image_io = io.BytesIO()
+        photo.save(image_io, format='JPEG')
+        image_io.seek(0)
+        try:
+            response = twitter.upload_media(media=image_io)
+            twitter.update_status(status=tweet,media_ids=[response['media_id']])
+        except TwythonError as e:
+            return json.dumps({"msg": "", "err": str(e)})
+        db.user_images.insert({'username':username,'tweet':tweet,'image':image,'createdat':datetime.now()})
+        return json.dumps({"msg": msg, "err": ""})
+    else:
+        return json.dumps({"msg": "", "err": err_msg })
 
-@app.route('/retweet')
+@app.route('/retweet',methods=['POST'])
 def retweet():
-    twitter = Twython(APP_KEY, APP_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
-    #ReTweeting by ID of the Tweet
-    try:
-        twitter.retweet(id = "985108650409775106")
-    except TwythonError as e:
-        return json.dumps(e)
-    return json.dumps("Retweeted Successfully")
+    username = request.json['username']
+    myuser = request.json['myuser']
+    tweet = request.json['text']
+    id1 = request.json['id']
+    avatar=request.json['avatar']
+    name= request.json['name']
+    userDB = db.twitter_user.find({'username':myuser})   
+    if userDB.count()>0:
+        data = list()
+        for i,d in enumerate(userDB):
+            data.append(d['oauth_token'])
+            data.append(d['oauth_secret'])
+        twitter = Twython(APP_KEY, APP_SECRET, data[0],data[1])
+        #ReTweeting by ID of the Tweet
+        try:
+            #twitter.update_status(status="CheckOut this cool tweet!!")
+            twitter.retweet(id = str(id1))
+        except TwythonError as e:
+            return json.dumps({"msg": "", "err": str(e)})
+        db.user_retweets.insert({"id": id1 ,
+                      "myuser": myuser,
+                      "avatar": avatar, 
+                      "name": name,    
+                      "username": username,
+                      "text": tweet,
+                      'retweetedat': datetime.now()})
+        return json.dumps({"msg": "Retweeted Successfully", "err": ""})
+    else:
+        return json.dumps({"msg": "", "err": err_msg })
 if __name__ == "__main__":
     app.run()

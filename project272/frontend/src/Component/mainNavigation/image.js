@@ -1,24 +1,29 @@
 import React, { Component } from 'react';
 import ReactDOM from "react-dom"
 import Nav from "./mainnav";
-import Notifications, {notify} from 'react-notify-toast';
+import Notifications, { notify } from 'react-notify-toast';
+import $ from 'jquery';
+window.jQuery = $;
+window.$ = $;
+global.jQuery = $;
+//const bootstrap = require('bootstrap');
 
-const baseURL = 'http://localhost:5000'
+var config = require('./config');
 class Image extends Component {
   constructor() {
     super()
     this.state = {
       pyImage: [],
-      message : [],
+      message: [],
       value: ""
     }
     this.handleChange = this.handleChange.bind(this);
   }
   handleChange(event) {
-    this.setState({ value : event.target.value });
+    this.setState({ value: event.target.value });
   }
   componentWillMount() {
-    fetch(baseURL + '/image/get', {
+    fetch(config.baseURL + '/image/get', {
       method: 'GET',
       mode: 'cors',
       dataType: 'json',
@@ -40,40 +45,45 @@ class Image extends Component {
   }
 
   postTweet(el) {
-    //console.log(this.document.getElementById("id"));
-    console.log(el)
-    var fImage = this.state.pyImage[el-1]["image"];
-    var fBlurb = this.state.pyImage[el-1]["tweet"];
-    var data = { "name": "manikantbit", "tweet": fBlurb, "image": fImage};
-    data = JSON.stringify(data);
-    console.log(data);
-    fetch(baseURL+'/image/tweet', {
-      method: 'POST',
-      mode: 'cors',
-      body: data,
-      dataType: 'json',
-      headers: ({
-        "Access-Control-Allow-Origin": "*",
-        'Content-Type': "application/json"
-      })
-    })
-      .then(r => r.json())
-      .then(r => Array.from(Object.keys(r), k => r[k])
-      )
-      .then(r => {
-         this.setState({
-          message: r
+    var username = localStorage.getItem('username')
+    if (username != '') {
+      var fImage = this.state.pyImage[el - 1]["image"];
+      var fBlurb =  $('#p'+el).text();//this.state.pyImage[el - 1]["tweet"];
+      var data = { "username": username, "tweet": fBlurb, "image": fImage };
+      data = JSON.stringify(data);
+      console.log(data);
+      fetch(config.baseURL + '/image/tweet', {
+        method: 'POST',
+        mode: 'cors',
+        body: data,
+        dataType: 'json',
+        headers: ({
+          "Access-Control-Allow-Origin": "*",
+          'Content-Type': "application/json"
         })
       })
-      .catch(err => console.log(err))
-      .then( r => {if(this.state.message[0] != "") {
-        notify.show(this.state.message[0], "error", 5000,"#008000")
-      } else if(this.state.message[1]!="") {
-        notify.show(this.state.message[1], "success", 5000,"#FF0000")
-      }}) 
+        .then(r => r.json())
+        .then(r => Array.from(Object.keys(r), k => r[k])
+        )
+        .then(r => {
+          this.setState({
+            message: r
+          })
+        })
+        .catch(err => console.log(err))
+        .then(r => {
+          if (this.state.message[0] != "") {
+            notify.show(this.state.message[0], "success", 5000, "#008000")
+          } else if (this.state.message[1] != "") {
+            notify.show(this.state.message[1], "error", 5000, "#FF0000")
+          }
+        })
+    } else {
+      notify.show('Invalid Session! Please reauthenticate your Twitter Account', 'error', 5000, "#008000")
+    }
   }
-  
- 
+
+
   render() {
     const options = {
       page: 1,  // which page you want to show as default
@@ -94,34 +104,73 @@ class Image extends Component {
       paginationShowsTotal: this.renderShowsTotal,
       paginationPosition: 'top'
     };
-    function myFunction(button) {
-      var x = document.getElementById("p");
-      if (x.contenteditable == "true") {
-        x.contentEditable = "false";
-        button.innerHTML = "Edit";
-      } else {
-        x.contentEditable = "true";
-        button.innerHTML = "Disable";
-      }
-    }
+    $(function(e) {
+      $('button').click(function() {
+        console.log((this.id).substring(0,3))
+        if((this.id).substring(0,3) == 'but') {
+        var no = (this.id).substring(3);
+        //$('#myModal').modal('show');
+        var data = $('#p'+no).text();
+        $('#prodId').val(no);
+        $('#txtInput').text(data);
+        }
+      });
+    });
+    $(function(e){
+      $('#btnSave').click(function() {
+        //var value = document.getElementById("p").innerText;
+        var value = $('#txtInput').html()
+        //console.log(value)
+        var index = $('input').val();
+        $('#p'+index).html(value);
+        //$('#myModal').modal('hide');
+      });
+    });
+  
+      
     let it = this.state.pyImage.map((product) => {
       return (
-       <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-       <div class="jumbotron">
-       <div className="card">
-        <div className="thumbnail">
-          <img src={product.image} alt="Responsive image" className = "img-fluid rounded"></img>
-          <div className="caption">
-            <p id='p' contentEditable="true" value= {product.tweet} onChange={this.handleChange}>{product.tweet}</p>
-            <div className="text-center">
-            <button id ={product.id} className='btn btn-info' onClick={() => this.postTweet(product.id)} >Tweet</button>
+        <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+          <div class="jumbotron">
+            <div className="card">
+              <div className="thumbnail">
+                <img src={product.image} alt="Responsive image" className="img-fluid rounded"></img>
+                <div className="caption">
+                  <p id={'p'+product.id}>{product.tweet}</p>
+                  <div className="row text-center"> 
+                    <div className="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
+                    <div className="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                      <button id ={'but'+ product.id} className="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal"><span className="glyphicon glyphicon-edit"></span> Edit</button>
+                      <div id="myModal" className="modal fade" role="dialog">
+                        <div className="modal-dialog">
+                          <div className="modal-content">
+                            <div className="modal-header">
+                            <h4 className="modal-title text -center">Make changes to Blurbs</h4>
+                              <button id ='close' type="button" className="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div className="modal-body" contenteditable ="true" ref='modalBody'>
+                            <p id="txtInput"></p>
+                            <input id="prodId" name="prodId" type="hidden"></input>
+                            </div>
+                            <div className="modal-footer">
+                            <button id="btnSave" type="button" class="btn btn-default" data-dismiss="modal">Save changes</button>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
+                    <div className="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                      <button id={product.id} className='btn btn-info btn-sm' onClick={() => this.postTweet(product.id)} ><span className="fa fa-twitter"></span>Tweet</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-         </div>
-         </div>
-      </div>
-      </div>    
           </div>
-       
+        </div>
+      
       )
     })
     return (

@@ -9,12 +9,13 @@ class Contact extends Component {
       <Header />
       <div className='jumbotron text-center'>
       
-      <h1><span class="fa fa-lock"></span> Contact Us</h1>
+      <h2> Contact Us</h2>
         <p>Aditya Chouhan</p>
 	      <p>Manikant Prasad</p>
         <p>Megha Nair</p>
         <p>Vidhya</p>   
      </div>
+     <div className="row mb-5"></div> 
      <div className ='text-center'>
      <Footer />
      </div>
