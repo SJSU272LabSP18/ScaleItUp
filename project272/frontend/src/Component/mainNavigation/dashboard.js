@@ -53,7 +53,7 @@ fetch('http://localhost:5000/dash', {
          
         </div>
 		<C3Chart data={this.state.data}/>
-		<div> Hello Chutiye...!!! </div>
+		
         </div>
       );
     }
