@@ -61,7 +61,7 @@ class Signin extends Component {
                 <div className='row'>
                 <div className="col-lg-3 col-md-3 col-sm-3 col-xs-3"></div>
                 <div className="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                  <button className="btn btn-info">Login</button>
+                  <button className="btn btn-info" onClick={(event)=>{this.props.history.push('/signin_aditya')}}>Login</button>
                   </div>
                   <div className="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
                   <div className="col-lg-2 col-md-2 col-sm-2 col-xs-2">

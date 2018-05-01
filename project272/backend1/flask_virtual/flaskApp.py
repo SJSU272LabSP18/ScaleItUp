@@ -105,7 +105,31 @@ def insert_data():
     db.tweet.insert({'tweet': 'This is my third tweet', 'done': 'N'})
     db.tweet.insert({'tweet': 'This is my fourth tweet', 'done': 'N'})
     return 'Added Tweets'
+	
+@app.route('/login_aditya', methods=['POST'])
+def loginApp():
+	data = db.users.find({"username": request.json["username"]})
+	#print (data[0]["password"])
+	#print(request.json["password"])
+	for x in data :
+		#print(x["password"])
+		if x["password"]==request.json["password"] :
+			#print("true")
+			return json.dumps({"authenticate": "true"})
+	return json.dumps({"authenticate": "false"})
 
+@app.route('/dash', methods=['GET'])
+def dash():
+	tweet_count = db.tweet.count();
+	print (tweet_count)
+	blurb_count = db.image.count();
+	print (blurb_count)
+	#print(request.json["password"])
+	arr = list()
+	arr.append(["Tweets",tweet_count])
+	arr.append(["Blurbs",blurb_count])
+	print (arr)
+	return json.dumps({"columns": arr,"type": "bar"})
 
 @app.route('/get')
 def get_data():
