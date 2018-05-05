@@ -26,12 +26,12 @@ class Retweet extends Component {
     e.preventDefault();
     var data = this.state.value
     if (data == '') {
-      notify.show("Please enter some search criteria", "success", 5000, "#FF0000")
+      notify.show("Please enter some search criteria", "error", 5000, "#FF0000")
     } else {
       data = encodeURIComponent(data)
       //data = JSON.stringify(data);
       console.log(data)
-      fetch(config.baseURL + '/search' + '?q=' + data, {
+      fetch(config.baseURL + '/search' + '?q=' + data+'&name='+localStorage.getItem('username'), {
         method: 'GET',
         mode: 'cors',
         dataType: 'json',
