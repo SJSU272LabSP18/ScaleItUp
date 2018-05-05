@@ -109,11 +109,13 @@ def insert_data():
     db.tweet.insert({'tweet': tweet_data, 'createdat':datetime.now()})
     return json.dumps({'msg':'success'})
 
-    db.tweet.insert({'tweet': 'This is my first tweet', 'done': 'N'})
-    db.tweet.insert({'tweet': 'This is my second tweet', 'done': 'N'})
-    db.tweet.insert({'tweet': 'This is my third tweet', 'done': 'N'})
-    db.tweet.insert({'tweet': 'This is my fourth tweet', 'done': 'N'})
-    return 'Added Tweets'
+@app.route('/update',methods=['POST'])
+def update_data():
+    tweet_data = request.json['tweet']
+    _id = request.json['_id']
+    _id1 = json.loads(_id, object_hook=json_util.object_hook)
+    db.tweet.update({'_id':_id1},{'tweet': tweet_data, 'modifiedat':datetime.now()})
+    return json.dumps({'msg':'success'})
 	
 @app.route('/login_aditya', methods=['POST'])
 def loginApp():

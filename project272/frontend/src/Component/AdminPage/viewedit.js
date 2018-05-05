@@ -189,7 +189,7 @@ class Viewedit extends Component {
         <div className="text-center">
         <Admin />
           
-          <h1> View & Edit </h1>
+          <h1> Blurbs </h1>
           </div>
           <div>
           <Notifications />
