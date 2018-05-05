@@ -109,13 +109,36 @@ def insert_data():
     db.tweet.insert({'tweet': tweet_data, 'createdat':datetime.now()})
     return json.dumps({'msg':'success'})
 
-@app.route('/update',methods=['POST'])
-def update_data():
-    tweet_data = request.json['tweet']
-    id = request.json['_id']
-    id1 = json.loads(id, object_hook=json_util.object_hook)
-    db.tweet.update({'_id':id1},{'tweet': tweet_data, 'modifiedat':datetime.now()})
-    return json.dumps({'msg':'success'})
+    db.tweet.insert({'tweet': 'This is my first tweet', 'done': 'N'})
+    db.tweet.insert({'tweet': 'This is my second tweet', 'done': 'N'})
+    db.tweet.insert({'tweet': 'This is my third tweet', 'done': 'N'})
+    db.tweet.insert({'tweet': 'This is my fourth tweet', 'done': 'N'})
+    return 'Added Tweets'
+	
+@app.route('/login_aditya', methods=['POST'])
+def loginApp():
+	data = db.users.find({"username": request.json["username"]})
+	#print (data[0]["password"])
+	#print(request.json["password"])
+	for x in data :
+		#print(x["password"])
+		if x["password"]==request.json["password"] :
+			#print("true")
+			return json.dumps({"authenticate": "true"})
+	return json.dumps({"authenticate": "false"})
+
+@app.route('/dash', methods=['GET'])
+def dash():
+	tweet_count = db.tweet.count()
+	print (tweet_count)
+	blurb_count = db.image.count()
+	print (blurb_count)
+	#print(request.json["password"])
+	arr = list()
+	arr.append(["Tweets",tweet_count])
+	arr.append(["Blurbs",blurb_count])
+	print (arr)
+	return json.dumps({"columns": arr,"type": "bar"})
 
 @app.route('/get')
 def get_data():
