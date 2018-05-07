@@ -90,7 +90,34 @@ class Nav extends Component {
 	}
 	render() {
 		return (
-			<div className='container'>
+		/* Changes by Aditya: starts */
+		<header className="header">
+  <div className="container header__container">
+<div className="header__logo"><img className="header__img" src="https://image.ibb.co/kcVou6/path3000.png"/> <h1 className="header__title">ScaleIt<span className="header__light">.up</span></h1></div> 
+     <button type="button" className="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+              <span className="sr-only">Toggle navigation</span>
+              <span className="icon-bar"></span>
+              <span className="icon-bar"></span>
+              <span className="icon-bar"></span>
+            </button>
+  
+  <div className="header__menu">
+    <nav id="navbar" className="header__nav collapse">
+      <ul className="header__elenco">
+        <li className="header__el"><a href="/dashboard" className="header__link">Dashboard</a></li>
+        <li className="header__el"><a href="/tweet" className="header__link">Blurbs</a></li>
+		<li className="header__el"><a href="/image" className="header__link">Blurbs & Images</a></li>
+		<li className="header__el"><a href="/retweet" className="header__link">Retweet</a></li>
+		<li className="header__el"><Link className="header__link" to="https://twitter.com" target='_blank'>{this.getURLParameter('name')}</Link></li>
+		<li className="header__el header__el--blue"><Link className="btn btn--white" to="/" onClick={this.logout}>Sign Out</Link></li>
+        
+      </ul>
+    </nav>
+  </div>
+    </div>
+</header>
+		/* Changes by Aditya: starts */
+			/*<div className='container'>
 				<nav className="navbar navbar-toggleable-md">
 					<button className="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
 						<span className="navbar-toggler-icon"></span>
@@ -123,7 +150,7 @@ class Nav extends Component {
 						</ul>
 					</div>
 				</nav>
-			</div>
+			</div>*/
 		);
 	}
 }
