@@ -19,6 +19,7 @@ import Retweet from "./Component/mainNavigation/retweet";
 import Dashboard from "./Component/mainNavigation/dashboard";
 import Dashadmin from "./Component/AdminPage/dashadmin";
 import Viewedit from "./Component/AdminPage/viewedit";
+import Upload from "./Component/AdminPage/upload";
 
 class App extends Component {
   render() {
@@ -36,6 +37,7 @@ class App extends Component {
 		      <Route exact path="/signin_aditya" component={signin_aditya}/>
           <Route exact path="/view" component={Viewedit}/>
           <Route exact path="/dashadmin" component={Dashadmin}/>
+          <Route exact path="/upload" component={Upload}/>
         </div>
       </Router>
     );

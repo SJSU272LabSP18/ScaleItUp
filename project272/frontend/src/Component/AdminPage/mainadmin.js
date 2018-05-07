@@ -22,10 +22,10 @@ class Admin extends Component {
 								<Link className="nav-link" to="/dashadmin">Dashboard <span className="sr-only">(current)</span></Link>
 							</li>
 							<li className="nav-item">
-								<Link className="nav-link" to="/upload">Upload</Link>
+								<Link className="nav-link" to="/upload">Images</Link>
 							</li>
 							<li className="nav-item">
-								<Link className="nav-link" to="/view">View & Edit</Link>
+								<Link className="nav-link" to="/view">Blurbs</Link>
 							</li>
 						</ul>
 						<ul className="navbar-nav ml-auto">

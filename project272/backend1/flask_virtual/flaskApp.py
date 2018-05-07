@@ -1,20 +1,21 @@
+from __future__ import print_function
 from flask import Flask, request, json, redirect, url_for,session
 from twython import Twython, TwythonError
 from flask.json import jsonify
 import sys
 from flask_cors import CORS, cross_origin
-from flask_restful import Resource, Api
+#from flask_restful import Resource, Api
 from flask import Response
 from flask_pymongo import PyMongo
 from pymongo import MongoClient
 from datetime import datetime
 import requests
 from requests.auth import HTTPBasicAuth
-from requests_oauthlib import OAuth1, OAuth2
+#from requests_oauthlib import OAuth1, OAuth2
 #from flask_mongoalchemy import MongoAlchemy
-from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
-from flask_login import UserMixin, current_user, LoginManager, login_required, login_user, logout_user
-from flask_dance.consumer import oauth_authorized
+#from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
+#from flask_login import UserMixin, current_user, LoginManager, login_required, login_user, logout_user
+#from flask_dance.consumer import oauth_authorized
 #from login import MongoAlchemyBackend
 import json
 import io
@@ -30,6 +31,10 @@ from aiohttp import web
 import urllib.parse
 from bson import ObjectId   
 from bson import json_util
+from apiclient.http import MediaFileUpload
+from apiclient.discovery import build
+from httplib2 import Http
+from oauth2client import file, client, tools
 
 app = Flask("Backend_API")
 app.config['SECRET_KEY'] = 'reyte@$24567788990753222'
@@ -297,5 +302,19 @@ def retweet():
         return json.dumps({"msg": "Retweeted Successfully", "err": ""})
     else:
         return json.dumps({"msg": "", "err": err_msg })
+
+@app.route('/image/upload',methods=['POST'])
+def image_upload():
+    metadata = request.json['metadata']
+    name = request.json['name']
+    drive_service = build('drive', 'v3', developerKey='4edc3f6803ee98993160262381f2f6034c21ad5a')
+    file_metadata = {'name': metadata}
+    media = MediaFileUpload('/home/prince/Pictures/7.jpeg',
+                        mimetype='image/jpeg')
+    file = drive_service.files().create(body=file_metadata,
+                                    media_body=media,
+                                    fields='id').execute()
+    print('File ID: %s',file.get('id'))
+
 if __name__ == "__main__":
     app.run()
