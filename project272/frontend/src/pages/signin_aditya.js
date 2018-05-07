@@ -9,7 +9,7 @@ import {
 	Link,
 } from 'react-router-dom';
 import { Redirect } from 'react-router';
-import "./Login.css";
+//import "./Login.css";
 
 const url = 'http://localhost:5000';
 class signin_aditya extends Component {
@@ -70,27 +70,41 @@ render(){
 				}
    
   return (
-    <div className="login"><style>{'body { background-color: #3498DB; }'}</style>
-		<div className="login-screen">
-			<div className="app-title">
-				<h1>Login</h1>
-			</div>
+    <div className="login">
+	<Header/>
+	 <div className="row">
+     <h1 className="row__title">
+    Please Sign In </h1>
 
-			<div className="login-form">
-				<div className="control-group">
-				<input type="text" className="login-field" value={this.state.username} onChange={(event)=> this.setState({username:event.target.value})} placeholder="username" id="login-name"/>
-				<label className="login-field-icon fui-user"></label>
-				</div>
-
-				<div className="control-group">
-				<input type="password" className="login-field" value={this.state.password} onChange={(event)=> this.setState({password:event.target.value})} placeholder="password" id="login-pass"/>
-				<label className="login-field-icon fui-lock" ></label>
-				</div>
-
-				<button className="btn btn-primary btn-large btn-block" onClick={(event)=>{this.handleSubmit(event)}}>login</button>
-				
-			</div>
+    </div>
+	 <div className="row row--margin" style={{marginBottom : '15%'}}>
+      <div className="col-md-4"></div>
+	<div className="col-md-4">
+        <div id="contact" className="form">
+          
+           <div className="form-group">
+             <div className="form__field--full">
+            <input type="text" value={this.state.username} onChange={(event)=> this.setState({username:event.target.value})} placeholder="Login*" className="form__field form__text"></input>
+             </div>
+			 </div>
+			 <div className="form-group">
+          <div className="form__field--full">
+          <input type="password" value={this.state.password} onChange={(event)=> this.setState({password:event.target.value})} placeholder="Password*" className="form__field form__text"></input>
+          </div>
+          </div>
+      
+      
+  
+          <div className="form-group">
+            
+            <button className="btn btn--up btn--width" onClick={(event)=>{this.handleSubmit(event)}}>Submit</button>
+          </div>
+        </div>
+		<div className="col-md-4"></div>
 		</div>
+      </div> 
+<Footer/>	  
+		
 	</div>
   );
 }

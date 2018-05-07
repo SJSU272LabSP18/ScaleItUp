@@ -48,38 +48,49 @@ class Signin extends Component {
     return (
       <div className="Signin">
         <Notifications />
-        <div className="container">
-          <Header />
-        </div>
-        <div className='container'>
-        <div className="row mb-5"></div>
-          <div className="row mb-2">
-            <div className="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-              <div className="jumbotron text-center">
-                <h2><span className="fa fa-lock"></span> Administrator Login</h2>
-                <p>Please Login via Button Below</p>
-                <div className='row'>
-                <div className="col-lg-3 col-md-3 col-sm-3 col-xs-3"></div>
-                <div className="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                  <button className="btn btn-info" onClick={(event)=>{this.props.history.push('/signin_aditya')}}>Login</button>
-                  </div>
-                  <div className="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
-                  <div className="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                  <button className="btn btn-info">Sign Up</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-              <div className="jumbotron text-center">
-                <h2><span className="fa fa-lock"></span> Employee Login with Twitter</h2>
-                <p>Please Login via Button Below</p>
-                <a href={config.baseURL + '/login'} className="btn btn-info"><span className="fa fa-twitter"></span> Login With Twitter</a>
-              </div>
-            </div>
+		<div>
+		 <Header />
+<div class="container" style={{marginBottom : '8%'}}>
+<div class="row row--center">
+  <h1 class="row__title">
+    Sign In
+  </h1>
+  <h2 class="row__sub">Please select an account to Sign In</h2>
+</div>
+<div class="row row--center row--margin">
+  <div class="col-md-6 col-sm-6 price-box price-box--purple">
+    <div class="price-box__wrap">
+      <div class="price-box__img"></div>
+      <h1 class="price-box__title">
+        Admin Login
+      </h1>
+       <div class="price-box__btn">
+      
+	  <button class="btn btn--purple btn--width" onClick={(event)=>{this.props.history.push('/signin_aditya')}}>Login</button>
+    </div>
+  </div>
+  </div>
+ 
+  <div class="col-md-6 col-sm-6 price-box price-box--blue">
+  <div class="price-box__wrap">
+      <div class="price-box__img "></div>
+      <h1 class="price-box__title">
+         Log In with Twitter
+      </h1>
+    <div class="price-box__btn">
+	  <a class="btn btn--blue btn--width" href={config.baseURL + '/login'}><span className="fa fa-twitter"></span> Login</a>
+    </div>
+  </div>
+  </div>
+  
+  
 
-          </div>
-        </div>
+</div>
+</div>
+<Footer/>
+</div>
+       
+        
       </div>
 
     );
