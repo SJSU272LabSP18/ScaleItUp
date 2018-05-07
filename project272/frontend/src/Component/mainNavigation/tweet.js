@@ -134,7 +134,7 @@ class Tweet extends Component {
         <div>
           <Notifications />
           <BootstrapTable ref='table' data={this.state.pyResp} selectRow={this.selectRowProp} search={true} pagination={true} options={options} version='4' cellEdit={this.cellEditProp}>
-            <TableHeaderColumn dataField="_id" isKey={true} dataAlign="left" width="70px" dataSort={true}>ID</TableHeaderColumn>
+            <TableHeaderColumn dataField="id" isKey={true} dataAlign="left" width="70px" dataSort={true}>ID</TableHeaderColumn>
             <TableHeaderColumn dataField="tweet" dataSort={true} width="300px">Blurbs</TableHeaderColumn>
           </BootstrapTable>
 
