@@ -44,10 +44,12 @@ fetch('http://localhost:5000/dash', {
       .catch(err => console.log(err))
 
       return (
+	  <div>
+	  <Nav />
         <div className="container">
         
         <div className="text-center">
-        <Nav />
+        
           
           <h1> Welcome to your Dashboard </h1>
          
@@ -55,6 +57,7 @@ fetch('http://localhost:5000/dash', {
 		<C3Chart data={this.state.data}/>
 		
         </div>
+		</div>
       );
     }
   }

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import ReactDOM from "react-dom"
 import Nav from "./mainnav";
 import "./mainNav.css";
-import { Glyphicon, Button } from 'react-bootstrap';
 import Notifications, { notify } from 'react-notify-toast';
 
 var config = require('./config');
