@@ -132,10 +132,6 @@ class Retweet extends Component {
         </div>
       </div>
       </div>
-
-
-
-
     )
   }
 }
