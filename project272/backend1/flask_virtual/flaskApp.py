@@ -1,20 +1,21 @@
+from __future__ import print_function
 from flask import Flask, request, json, redirect, url_for,session
 from twython import Twython, TwythonError
 from flask.json import jsonify
 import sys
 from flask_cors import CORS, cross_origin
-from flask_restful import Resource, Api
+#from flask_restful import Resource, Api
 from flask import Response
 from flask_pymongo import PyMongo
 from pymongo import MongoClient
 from datetime import datetime
 import requests
 from requests.auth import HTTPBasicAuth
-from requests_oauthlib import OAuth1, OAuth2
+#from requests_oauthlib import OAuth1, OAuth2
 #from flask_mongoalchemy import MongoAlchemy
-from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
-from flask_login import UserMixin, current_user, LoginManager, login_required, login_user, logout_user
-from flask_dance.consumer import oauth_authorized
+#from flask_dance.contrib.twitter import make_twitter_blueprint, twitter
+#from flask_login import UserMixin, current_user, LoginManager, login_required, login_user, logout_user
+#from flask_dance.consumer import oauth_authorized
 #from login import MongoAlchemyBackend
 import json
 import io
@@ -30,6 +31,10 @@ from aiohttp import web
 import urllib.parse
 from bson import ObjectId   
 from bson import json_util
+from apiclient.http import MediaFileUpload
+from apiclient.discovery import build
+from httplib2 import Http
+from oauth2client import file, client, tools
 
 app = Flask("Backend_API")
 app.config['SECRET_KEY'] = 'reyte@$24567788990753222'
@@ -209,12 +214,11 @@ def search():
     else:
         return json.dumps({"msg": "", "err": err_msg })
 
-@app.route('/image/upload')
+@app.route('/image/upload',methods=['POST'])
 def uploadImage():
-    db.image.insert({'tweet': 'This is my first image tweet', 'image': 'https://drive.google.com/uc?id=1Kby3U8Dyypkch3btuOUBmE5KtWcnYqPk','createdat':datetime.now()})
-    db.image.insert({'tweet': 'This is my second image tweet', 'image': 'https://drive.google.com/uc?id=11fSFsHlZfcva1tBNU-hAgXTOhFm05MZA','createdat':datetime.now()})
-    db.image.insert({'tweet': 'This is my third image tweet', 'image': 'https://drive.google.com/uc?id=1xRoU-q4v48z9GlsrmsHIOkU59kHSkZ7e','createdat':datetime.now()})
-    db.image.insert({'tweet': 'This is my fourth image tweet','image': 'https://drive.google.com/uc?id=1QsCLwHjTwhg6hwB2WeKO4-9WYrcuUBAQ','createdat':datetime.now()})
+    tweet = request.json['tweet']
+    imageURL = request.json['image']
+    db.image.insert({'tweet': tweet, 'image': imageURL,'createdat':datetime.now()})
     return json.dumps({'msg':"success"})
 
 @app.route('/delete/tweet',methods=['DELETE'])
@@ -297,5 +301,6 @@ def retweet():
         return json.dumps({"msg": "Retweeted Successfully", "err": ""})
     else:
         return json.dumps({"msg": "", "err": err_msg })
+
 if __name__ == "__main__":
     app.run()

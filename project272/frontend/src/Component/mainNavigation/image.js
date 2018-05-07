@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ReactDOM from "react-dom"
+import ReactDOM from "react-dom";
 import Nav from "./mainnav";
 import Notifications, { notify } from 'react-notify-toast';
 import $ from 'jquery';
