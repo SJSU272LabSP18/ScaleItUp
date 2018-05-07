@@ -1,18 +1,16 @@
+import Notifications, { notify } from 'react-notify-toast';
 import React, { Component } from 'react';
+import ReactDOM from "react-dom";
 import Admin from './mainadmin';
-import axios from 'axios';
-import fs from 'fs';
+import { isNull } from 'util';
+import $ from 'jquery';
+window.jQuery = $;
+window.$ = $;
+global.jQuery = $;
 var firebase = require("firebase");
-//import drive from 'drive';
-//import {google, drive_v3} from 'googleapis';
-//import gapi from 'gapi-client';
-/*var googleAuth = require('google-auth-library');
-var readline = require('readline');
-const google = require('googleapis');
-var drive = google.drive("v3");
-*/
+var config = require('../mainNavigation/config');
 
-var config = {
+var config1 = {
   apiKey: "AIzaSyB_KZF-Fx4NN99ZCJwgiI7dHfdDeGgmVcU",
   authDomain: "social-app-promotion.firebaseapp.com",
   databaseURL: "https://social-app-promotion.firebaseio.com",
@@ -20,90 +18,207 @@ var config = {
   storageBucket: "social-app-promotion.appspot.com",
   messagingSenderId: "412124305527"
 };
-firebase.initializeApp(config);
+firebase.initializeApp(config1);
 
-var config = require('../mainNavigation/config');
 class Upload extends Component {
-
-        state = {
-            selectedFile: null
-        }
-      fileChangedHandler = (event) => {
-        this.setState ({
-          selectedFile: event.target.files[0]
-      })}
-      uploadHandler = (e) => {
-        e.preventDefault();
-        var storageRef = firebase.storage().ref('/cmpe272/' + this.state.selectedFile.name);
-        var uploadTask = storageRef.put(this.state.selectedFile)
-       /*const formData = new FormData()
-       formData.append('myFile', this.state.selectedFile, this.state.selectedFile.name)
-        axios.post('https://www.googleapis.com/upload/drive/v3/files?uploadType=media', formData), {
-            onUploadProgress: progressEvent => {
-              console.log(progressEvent.loaded / progressEvent.total)
-            }
-      } 
-      console.log(this.state.selectedFile,this.state.selectedFile.name)
-      var data ={ 'metadata':this.state.selectedFile,'name':this.state.selectedFile.name}
-      data = JSON.stringify(data)*/
-      /*fetch(config.baseURL + '/image/upload', {
-        method: 'POST',
-        mode: 'cors',
-        body: data,
-        dataType: 'json',
-        headers: ({
-          "Access-Control-Allow-Origin": "*",
-          'Content-Type': "application/json"
+  constructor() {
+    super()
+    this.state = {
+      selectedFile: null,
+      input: '',
+      pyImage:[]
+    }
+    this.fileChangedHandler=this.fileChangedHandler.bind(this);
+    this.uploadHandler = this.uploadHandler.bind(this)
+    this.handleChange = this.handleChange.bind(this);
+    this.getImages = this.getImages.bind(this)
+  }
+  componentWillMount() {
+    console.log(config.baseURL)
+    fetch(config.baseURL + '/image/get', {
+      method: 'GET',
+      mode: 'cors',
+      dataType: 'json',
+      headers: ({
+        "Access-Control-Allow-Origin": "*",
+        'Content-Type': "application/json"
+      })
+    }).then(r => r.json())
+      .then(r => Array.from(Object.keys(r), k => r[k])
+      )
+      .then(r => {
+        console.log(r)
+        this.setState({
+          pyImage: r,
         })
       })
-        .then(r => r.json())
-        .then(r => Array.from(Object.keys(r), k => r[k])
-        )
-        .then(r => {
-          this.setState({
-            message: r
-          })
-        })
-        .catch(err => console.log(err))
-      */
-      /*const drive = google.drive({
-        version: 'v3',
-        auth: 'AIzaSyBuMt1AGm0V3kzHZVi2p5BnRXgSqczEiRo'
-      });
-      var fileMetadata = {
-        'name': this.state.selectedFile
-      };
-      var media = {
-        mimeType: 'image/jpeg',
-        body: fs.createReadStream(this.state.selectedFile.name)
-      };
-      drive.files.create({
-        resource: fileMetadata,
-        media: media,
-        fields: 'id'
-      }, function (err, file) {
-        if (err) {
-          // Handle error
-          console.error(err);
-        } else {
-          console.log('File Id: ', file.id);
-        }
-      }); */
-    }    
-    render() {
-      return (
-        <div className="container">
-        <div className="text-center">
-        <Admin />
-          <h1> Images </h1>
-          <form>
-          <input type="file" onChange={this.fileChangedHandler}></input>
-        <button class="btn btn-info" onClick={this.uploadHandler}>Upload!</button>
-        </form>
-        </div>
-        </div>
-      );
-    }
+      .catch(err => console.log(err))
   }
   
-  export default Upload;
+  handleChange = (e) => {
+    this.setState({ input: e.target.value });
+  }
+  fileChangedHandler = (event) => {
+    this.setState({
+      selectedFile: event.target.files[0]
+    })
+  }
+  uploadHandler = (e) => {
+    e.preventDefault();
+    
+    console.log(this.state.input);
+    var tweet = this.state.input
+  
+    if (this.state.selectedFile.name != null) {
+      var storageRef = firebase.storage().ref('/cmpe272/' + this.state.selectedFile.name);
+      var uploadTask = storageRef.put(this.state.selectedFile)
+
+      uploadTask.on('state_changed', function (snapshot) {
+
+      }, function (error) {
+
+      }, function () {
+        var downloadURL = uploadTask.snapshot.downloadURL;
+        console.log(downloadURL);
+        var data = { 'tweet': tweet, 'image': downloadURL }
+        data = JSON.stringify(data)
+        fetch(config.baseURL + '/image/upload', {
+          method: 'POST',
+          mode: 'cors',
+          body: data,
+          dataType: 'json',
+          headers: ({
+            "Access-Control-Allow-Origin": "*",
+            'Content-Type': "application/json"
+          })
+        })
+          .then(r => r.json())
+          .then(r => Array.from(Object.keys(r), k => r[k])
+          )
+          .then(r => {
+            this.setState({
+              message: r
+            })
+          })
+          .catch(err => console.log(err))
+        notify.show("Image uploaded successfully", "success", 5000, "#FF0000")
+      }
+      );
+    } else {
+      notify.show("Please select a image file", "error", 5000, "#FF0000")
+    }
+  }
+  getImages(){
+    fetch(config.baseURL + '/image/get', {
+      method: 'GET',
+      mode: 'cors',
+      dataType: 'json',
+      headers: ({
+        "Access-Control-Allow-Origin": "*",
+        'Content-Type': "application/json"
+      })
+    })
+      .then(r => r.json())
+      .then(r => Array.from(Object.keys(r), k => r[k])
+      )
+      .then(r => {
+        console.log(r)
+        this.setState({
+          pyImage: r,
+        })
+      })
+      .catch(err => console.log(err))
+  }
+  render() {
+    $(function(e) {
+      $('button').click(function() {
+        console.log((this.id).substring(0,3))
+        if((this.id).substring(0,3) == 'but') {
+        var no = (this.id).substring(3);
+        //$('#myModal').modal('show');
+        var data = $('#p'+no).text();
+        $('#prodId').val(no);
+        $('#txtInput').text(data);
+        }
+      });
+    });
+    $(function(e){
+      $('#btnSave').click(function() {
+        //var value = document.getElementById("p").innerText;
+        var value = $('#txtInput').html()
+        //console.log(value)
+        var index = $('input').val();
+        $('#p'+index).html(value);
+        //$('#myModal').modal('hide');
+      });
+    });
+  
+      
+    let it = this.state.pyImage.map((product) => {
+      return (
+        <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+          <div className="jumbotron">
+            <div className="card">
+              <div className="thumbnail">
+                <img src={product.image} alt="Responsive image" className="img-fluid rounded"></img>
+                <div className="caption">
+                  <p id={'p'+product.id}>{product.tweet}</p>
+                  <div className="row text-center"> 
+                    <div className="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
+                    <div className="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                      <button id ={'but'+ product.id} className="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal"><span className="glyphicon glyphicon-edit"></span> Edit</button>
+                      <div id="myModal" className="modal fade" role="dialog">
+                        <div className="modal-dialog">
+                          <div className="modal-content">
+                            <div className="modal-header">
+                            <h4 className="modal-title text -center">Make changes to Blurbs</h4>
+                              <button id ='close' type="button" className="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div className="modal-body" contenteditable ="true" ref='modalBody'>
+                            <p id="txtInput"></p>
+                            <input id="prodId" name="prodId" type="hidden"></input>
+                            </div>
+                            <div className="modal-footer">
+                            <button id="btnSave" type="button" class="btn btn-default" data-dismiss="modal">Save changes</button>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
+                    <div className="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                      <button id={product.id} className='btn btn-info btn-sm' onClick={() => this.postTweet(product.id)} ><span className="fa fa-twitter"></span>Tweet</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      
+      )
+    })
+    return (
+      <div className="container">
+      <Notifications/>
+        <div className="text-center">
+          <Admin />
+          <h1> Images </h1>
+          <form>
+            <label>Enter Blurbs Here:</label>
+            <input type="text" onChange={ this.handleChange } />
+            <label>Select Image:</label>
+            <input type="file" onChange={this.fileChangedHandler}></input>
+            <button className="btn btn-info" type = 'Submit' onClick={this.uploadHandler}>Upload!</button>
+          </form>
+          <div className="row mb-3">
+            {it}
+          </div>
+        </div>
+      </div>
+    );
+  }
+}
+
+export default Upload;

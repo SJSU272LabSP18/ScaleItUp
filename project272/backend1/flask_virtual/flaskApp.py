@@ -214,12 +214,11 @@ def search():
     else:
         return json.dumps({"msg": "", "err": err_msg })
 
-@app.route('/image/upload')
+@app.route('/image/upload',methods=['POST'])
 def uploadImage():
-    db.image.insert({'tweet': 'This is my first image tweet', 'image': 'https://drive.google.com/uc?id=1Kby3U8Dyypkch3btuOUBmE5KtWcnYqPk','createdat':datetime.now()})
-    db.image.insert({'tweet': 'This is my second image tweet', 'image': 'https://drive.google.com/uc?id=11fSFsHlZfcva1tBNU-hAgXTOhFm05MZA','createdat':datetime.now()})
-    db.image.insert({'tweet': 'This is my third image tweet', 'image': 'https://drive.google.com/uc?id=1xRoU-q4v48z9GlsrmsHIOkU59kHSkZ7e','createdat':datetime.now()})
-    db.image.insert({'tweet': 'This is my fourth image tweet','image': 'https://drive.google.com/uc?id=1QsCLwHjTwhg6hwB2WeKO4-9WYrcuUBAQ','createdat':datetime.now()})
+    tweet = request.json['tweet']
+    imageURL = request.json['image']
+    db.image.insert({'tweet': tweet, 'image': imageURL,'createdat':datetime.now()})
     return json.dumps({'msg':"success"})
 
 @app.route('/delete/tweet',methods=['DELETE'])
@@ -302,19 +301,6 @@ def retweet():
         return json.dumps({"msg": "Retweeted Successfully", "err": ""})
     else:
         return json.dumps({"msg": "", "err": err_msg })
-
-@app.route('/image/upload',methods=['POST'])
-def image_upload():
-    metadata = request.json['metadata']
-    name = request.json['name']
-    drive_service = build('drive', 'v3', developerKey='4edc3f6803ee98993160262381f2f6034c21ad5a')
-    file_metadata = {'name': metadata}
-    media = MediaFileUpload('/home/prince/Pictures/7.jpeg',
-                        mimetype='image/jpeg')
-    file = drive_service.files().create(body=file_metadata,
-                                    media_body=media,
-                                    fields='id').execute()
-    print('File ID: %s',file.get('id'))
 
 if __name__ == "__main__":
     app.run()
