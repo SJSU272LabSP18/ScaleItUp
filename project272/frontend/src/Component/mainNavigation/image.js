@@ -130,17 +130,16 @@ class Image extends Component {
       
     let it = this.state.pyImage.map((product) => {
       return (
-        <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
-          <div class="jumbotron">
-            <div className="card">
-              <div className="thumbnail">
-                <img src={product.image} alt="Responsive image" className="img-fluid rounded"></img>
-                <div className="caption">
+	  <div className="col-md-4 col-sm-4 price-box price-box--blue">
+        <div style={{marginTop:'6%',backgroundColor: '#fff',borderRadius: '6px',boxShadow: '0 4px 8px 0px rgba(0,0,0,0.2)',padding: '35px 35px 40px 35px'}}>
+          
+           
+                <img src={product.image} alt="Responsive image" style={{maxHeight:'140px', maxWidth :'260px'}} className="img-fluid rounded"></img>
+                
                   <p id={'p'+product.id}>{product.tweet}</p>
-                  <div className="row text-center"> 
-                    <div className="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
-                    <div className="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                      <button id ={'but'+ product.id} className="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal"><span className="glyphicon glyphicon-edit"></span> Edit</button>
+                  
+                    
+                      <button id ={'but'+ product.id} className="btn btn--blue btn--width" style={{width:'90px', borderRadius :'0px', padding: '5px 18px'}} data-toggle="modal" data-target="#myModal"><span className="glyphicon glyphicon-edit"></span> Edit</button>
                       <div id="myModal" className="modal fade" role="dialog">
                         <div className="modal-dialog">
                           <div className="modal-content">
@@ -159,18 +158,17 @@ class Image extends Component {
 
                         </div>
                       </div>
-                    </div>
-                    <div className="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
-                    <div className="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                      <button id={product.id} className='btn btn-info btn-sm' onClick={() => this.postTweet(product.id)} ><span className="fa fa-twitter"></span>Tweet</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+                    
+
+                    
+                      <button id={product.id} className='btn btn--blue btn--width' style={{width:'90px', borderRadius :'0px', padding: '5px 18px', marginLeft : '7%'}} onClick={() => this.postTweet(product.id)} ><span className="fa fa-twitter"></span>Tweet</button>
+                   
+             
+             
+             
+       
         </div>
-      
+      </div>
       )
     })
     return (
@@ -179,7 +177,7 @@ class Image extends Component {
         <div className="text-center">
           <h1 text-align='center'>Images & Blurbs</h1>
           <Notifications />
-          <div className="row mb-3">
+          <div className="row row--margin">
             {it}
           </div>
         </div>

@@ -17,8 +17,7 @@ import Image from "./Component/mainNavigation/image";
 import Admin from "./Component/AdminPage/mainadmin";
 import Retweet from "./Component/mainNavigation/retweet";
 import Dashboard from "./Component/mainNavigation/dashboard";
-import Dashadmin from "./Component/AdminPage/dashadmin";
-import Viewedit from "./Component/AdminPage/viewedit";
+
 
 class App extends Component {
   render() {
@@ -33,9 +32,7 @@ class App extends Component {
           <Route exact path="/image" component={Image}/>
           <Route exact path="/admin" component={Admin}/>
           <Route exact path="/retweet" component={Retweet}/>
-		      <Route exact path="/signin_aditya" component={signin_aditya}/>
-          <Route exact path="/view" component={Viewedit}/>
-          <Route exact path="/dashadmin" component={Dashadmin}/>
+		  <Route exact path="/signin_aditya" component={signin_aditya}/>
         </div>
       </Router>
     );
