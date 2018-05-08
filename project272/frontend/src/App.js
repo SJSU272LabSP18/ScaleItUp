@@ -17,17 +17,11 @@ import Image from "./Component/mainNavigation/image";
 import Admin from "./Component/AdminPage/mainadmin";
 import Retweet from "./Component/mainNavigation/retweet";
 import Dashboard from "./Component/mainNavigation/dashboard";
-<<<<<<< HEAD
 
 import Dashadmin from "./Component/AdminPage/dashadmin";
 import Viewedit from "./Component/AdminPage/viewedit";
 import Upload from "./Component/AdminPage/upload";
 
-=======
-import Dashadmin from "./Component/AdminPage/dashadmin";
-import Viewedit from "./Component/AdminPage/viewedit";
-import Upload from "./Component/AdminPage/upload";
->>>>>>> 17baa6b45394521b5e1cc13ee8efd00479088d76
 
 class App extends Component {
   render() {
@@ -42,18 +36,12 @@ class App extends Component {
           <Route exact path="/image" component={Image}/>
           <Route exact path="/admin" component={Admin}/>
           <Route exact path="/retweet" component={Retweet}/>
-<<<<<<< HEAD
 
-=======
->>>>>>> 17baa6b45394521b5e1cc13ee8efd00479088d76
 		      <Route exact path="/signin_aditya" component={signin_aditya}/>
           <Route exact path="/view" component={Viewedit}/>
           <Route exact path="/dashadmin" component={Dashadmin}/>
           <Route exact path="/upload" component={Upload}/>
-<<<<<<< HEAD
 
-=======
->>>>>>> 17baa6b45394521b5e1cc13ee8efd00479088d76
         </div>
       </Router>
     );
