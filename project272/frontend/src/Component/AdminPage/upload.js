@@ -34,8 +34,7 @@ class Upload extends Component {
     this.getImages = this.getImages.bind(this)
   }
   componentWillMount() {
-    console.log(config.baseURL)
-    fetch(config.baseURL + '/image/get', {
+      fetch(config.baseURL + '/image/get', {
       method: 'GET',
       mode: 'cors',
       dataType: 'json',
@@ -69,7 +68,7 @@ class Upload extends Component {
     console.log(this.state.input);
     var tweet = this.state.input
   
-    if (this.state.selectedFile.name != null) {
+    if (this.state.selectedFile != null) {
       var storageRef = firebase.storage().ref('/cmpe272/' + this.state.selectedFile.name);
       var uploadTask = storageRef.put(this.state.selectedFile)
 
@@ -101,9 +100,9 @@ class Upload extends Component {
             })
           })
           .catch(err => console.log(err))
-        notify.show("Image uploaded successfully", "success", 5000, "#FF0000")
-      }
-      );
+          notify.show("Image uploaded successfully", "success", 5000, "#FF0000")
+        })
+    
     } else {
       notify.show("Please select a image file", "error", 5000, "#FF0000")
     }
@@ -188,7 +187,7 @@ class Upload extends Component {
                     </div>
                     <div className="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
                     <div className="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                      <button id={product.id} className='btn btn-info btn-sm' onClick={() => this.postTweet(product.id)} ><span className="fa fa-twitter"></span>Tweet</button>
+                      <button id={product.id} className='btn btn-info btn-sm' onClick={() => this.deleteTweet(product.id)} ><span className="glyphicon glyphicon-trash"></span>Delete</button>
                     </div>
                   </div>
                 </div>

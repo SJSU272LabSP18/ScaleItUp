@@ -234,8 +234,17 @@ def getImage():
     data = db.image.find()
     dImage = list()
     for i,d in enumerate(data):
-        dImage.append({'id':i+1, 'tweet': d['tweet'], 'image': d['image']})
+        _id = json.dumps(d['_id'], default=json_util.default)
+        dImage.append({'_id':_id,id':i+1, 'tweet': d['tweet'], 'image': d['image']})
     return json.dumps(dImage)
+
+@app.route('/delete/tweet',methods=['DELETE'])
+def deleteImage():
+    _id = request.json['data']
+    _id1 = json.loads(_id, object_hook=json_util.object_hook)
+    #return json.dumps(_id1)
+    db.image.delete_one({'_id':_id1})
+    return json.dumps({'msg': 'success'})
 
 @app.route('/image/tweet',methods=['POST'])
 def tweetImage():
