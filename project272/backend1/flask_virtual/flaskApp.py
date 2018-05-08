@@ -235,7 +235,7 @@ def getImage():
     dImage = list()
     for i,d in enumerate(data):
         _id = json.dumps(d['_id'], default=json_util.default)
-        dImage.append({'_id':_id,id':i+1, 'tweet': d['tweet'], 'image': d['image']})
+        dImage.append({'_id':_id, 'id':i+1, 'tweet': d['tweet'], 'image': d['image']})
     return json.dumps(dImage)
 
 @app.route('/delete/tweet',methods=['DELETE'])

@@ -128,6 +128,38 @@ class Upload extends Component {
       })
       .catch(err => console.log(err))
   }
+  deleteImage(el){
+      var imageID = this.state.pyImage[el-1]['_id']
+      var data = {"data": imageID};
+      data = JSON.stringify(data);
+      console.log(data);
+      fetch(config.baseURL + '/image/tweet', {
+        method: 'POST',
+        mode: 'cors',
+        body: data,
+        dataType: 'json',
+        headers: ({
+          "Access-Control-Allow-Origin": "*",
+          'Content-Type': "application/json"
+        })
+      })
+        .then(r => r.json())
+        .then(r => Array.from(Object.keys(r), k => r[k])
+        )
+        .then(r => {
+          this.setState({
+            message: r
+          })
+        })
+        .catch(err => console.log(err))
+        .then(r => {
+          if (this.state.message[0] != "") {
+            notify.show(this.state.message[0], "success", 5000, "#008000")
+          } else if (this.state.message[1] != "") {
+            notify.show(this.state.message[1], "error", 5000, "#FF0000")
+          }
+        })
+  }
   render() {
     $(function(e) {
       $('button').click(function() {
@@ -187,7 +219,7 @@ class Upload extends Component {
                     </div>
                     <div className="col-lg-2 col-md-2 col-sm-2 col-xs-2"></div>
                     <div className="col-lg-2 col-md-2 col-sm-2 col-xs-2">
-                      <button id={product.id} className='btn btn-info btn-sm' onClick={() => this.deleteTweet(product.id)} ><span className="glyphicon glyphicon-trash"></span>Delete</button>
+                      <button id={product.id} className='btn btn-info btn-sm' onClick={() => this.deleteImage(product.id)} ><span className="glyphicon glyphicon-trash"></span>Delete</button>
                     </div>
                   </div>
                 </div>
