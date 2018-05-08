@@ -66,7 +66,7 @@ onSuccess = (response) => {
 render(){
 	if(this.state.redirectHome == true)
 				{
-					return <Redirect push to="/dashboard" />;
+					return <Redirect push to="/dashadmin" />;
 				}
    
   return (
