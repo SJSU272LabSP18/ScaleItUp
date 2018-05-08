@@ -184,10 +184,12 @@ class Viewedit extends Component {
             afterInsertRow: this.saveAfter
           };
       return (
+	  <div>
+	   <Admin />
         <div className="container">
         
         <div className="text-center">
-        <Admin />
+       
           
           <h1> Blurbs </h1>
           </div>
@@ -200,7 +202,7 @@ class Viewedit extends Component {
           </BootstrapTable>
         </div>
         </div>
-        
+        </div>
       );
     }
   }

@@ -143,7 +143,7 @@ def dash():
 	#print(request.json["password"])
 	arr = list()
 	arr.append(["Tweets",tweet_count])
-	arr.append(["Blurbs",blurb_count])
+	arr.append(["Images",blurb_count])
 	print (arr)
 	return json.dumps({"columns": arr,"type": "bar"})
 
