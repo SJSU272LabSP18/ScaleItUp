@@ -215,7 +215,41 @@ class Upload extends Component {
     });   
     let it = this.state.pyImage.map((product) => {
       return (
-        <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
+	  <div className="col-md-4 col-sm-4 price-box price-box--blue">
+        <div style={{marginTop:'6%',backgroundColor: '#fff',borderRadius: '6px',boxShadow: '0 4px 8px 0px rgba(0,0,0,0.2)',padding: '35px 35px 40px 35px'}}>
+          
+           
+                <img src={product.image} alt="Responsive image" style={{maxHeight:'140px', maxWidth :'260px'}} className="img-fluid rounded"></img>
+                
+                  <p id={'p'+product.id}>{product.tweet}</p>
+                    
+                      <button id ={'but'+ product.id} className="btn btn--blue btn--width" style={{width:'90px', borderRadius :'0px', padding: '5px 18px'}} data-toggle="modal" data-target="#myModal"><span className="glyphicon glyphicon-edit"></span> Edit</button>
+                      <div id="myModal" className="modal fade" role="dialog">
+                        <div className="modal-dialog">
+                          <div className="modal-content">
+                            <div className="modal-header">
+                            <h4 className="modal-title text -center">Make changes to Blurbs</h4>
+                              <button id ="close" type="button" className="close" data-dismiss="modal">&times;</button>
+                            </div>
+                            <div className="modal-body" contentEditable ="true" ref='modalBody'>
+                            <p id="txtInput"></p>
+                            <input id="prodId" name="prodId" type="hidden"></input>
+                            </div>
+                            <div className="modal-footer">
+							<button id="btnSave" type="button" class="btn btn-default" data-dismiss="modal" onClick = {() =>this.editTweet(document.getElementById("prodId").value)}>Save changes</button>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    <button id={product.id} className='btn btn--blue btn--width' style={{width:'90px', borderRadius :'0px', padding: '5px 18px', marginLeft : '7%'}} onClick={() => this.deleteImage(product.id)} ><span className="glyphicon glyphicon-trash"></span>Delete</button>
+             
+             
+             
+       
+        </div>
+      </div>
+        /*<div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
           <div className="jumbotron">
             <div className="card">
               <div className="thumbnail">
@@ -254,12 +288,31 @@ class Upload extends Component {
               </div>
             </div>
           </div>
-        </div>
+        </div>*/
       
       )
     })
     return (
-      <div className="container">
+	<div className='container'>
+	 <Notifications />
+        <Admin />
+        <div className="text-center">
+          <h1 text-align='center'>Images</h1>
+		  <form>
+            <label>Enter Blurbs Here:</label>
+            <input type="text" onChange={ this.handleChange } />
+            <label>Select Image:</label>
+            <input type="file" onChange={this.fileChangedHandler}></input>
+            <button className="btn btn-info" type = 'Submit' onClick={this.uploadHandler}>Upload!</button>
+          </form>
+         
+          <div className="row row--margin">
+            {it}
+			{this.renderImage}
+          </div>
+        </div>
+      </div>
+      /*<div className="container">
       <Notifications/>
         <div className="text-center">
           <Admin />
@@ -276,7 +329,7 @@ class Upload extends Component {
             {this.renderImage}
           </div>
         </div>
-      </div>
+      </div>*/
     );
   }
 }
