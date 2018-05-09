@@ -202,7 +202,7 @@ def search():
             return json.dumps({"msg": "", "err": str(e)})
         for tweet in search_results['statuses']:
             jList.append({"id":i ,
-                      "id_tweet": tweet['id'] ,
+                      "id_tweet": tweet['id_str'] ,
                       "avatar": tweet['user']["profile_image_url"], 
                       "author": tweet['user']['name'],    
                       "user": tweet['user']['screen_name'],

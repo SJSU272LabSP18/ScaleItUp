@@ -36,7 +36,6 @@ fetch('http://localhost:5000/dash', {
     }).then(r => r.json())
 	  .then(r => {
         console.log(r);
-		debugger;
 		var temp =r;
 		this.setState({data: temp});
 		console.log(this.state.data);
