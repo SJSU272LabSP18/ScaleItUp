@@ -4,6 +4,7 @@ import ReactDOM from "react-dom";
 import Admin from './mainadmin';
 import { isNull } from 'util';
 import $ from 'jquery';
+import './upload.css';
 window.jQuery = $;
 window.$ = $;
 global.jQuery = $;
@@ -298,12 +299,29 @@ class Upload extends Component {
         <Admin />
         <div className="text-center">
           <h1 text-align='center'>Images</h1>
-		  <form>
-            <label>Enter Blurbs Here:</label>
-            <input type="text" onChange={ this.handleChange } />
-            <label>Select Image:</label>
+		  <form class="form">
+		  <div class="form-group">
+		<div class="col-md-3"></div>
+			<div class="col-md-6">
+            <input type="text" onChange={ this.handleChange } placeholder="Enter Blurb here" class="form__field form__text" />
+			</div>
+			<div class="col-md-3"></div>
+			</div>
+			<div class="form-group">
+			<div class="col-md-4"></div>
+			<div class="col-md-2">
+            <label style={{fontSize:'20px'}}>Select Image:</label>
+			</div>
+			<div class="col-md-2">
+			<div class="custom-file">
+			<span class="btn btn-default btn-file"> Browse
             <input type="file" onChange={this.fileChangedHandler}></input>
-            <button className="btn btn-info" type = 'Submit' onClick={this.uploadHandler}>Upload!</button>
+			</span>
+			</div>
+			</div>
+			<div class="col-md-4"></div>
+			</div>
+            <button className="btn btn-info" type = 'Submit' onClick={this.uploadHandler} style={{borderRadius:'0px'}}>Upload!</button>
           </form>
          
           <div className="row row--margin">
