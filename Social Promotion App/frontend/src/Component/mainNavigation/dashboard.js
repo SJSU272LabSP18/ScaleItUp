@@ -9,7 +9,7 @@ class Dashboard extends Component {
     this.state = {data: {
   columns: [
     ['Tweets', 0],
-    ['Blurbs', 0]
+    ['Images', 0]
   ],
   type : 'bar'
 }};
@@ -36,9 +36,9 @@ fetch('http://localhost:5000/dash', {
     }).then(r => r.json())
 	  .then(r => {
         console.log(r);
-		    var temp =r;
-		this.setState({data: temp});
-		console.log(this.state.data);
+        var temp =r;
+        this.setState({data: temp});
+        console.log(this.state.data);
       })
       .catch(err => console.log(err))
 
