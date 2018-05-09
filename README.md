@@ -1,4 +1,4 @@
-
+﻿
 # Project Team 19
 
 ## Student Names:
@@ -11,7 +11,7 @@ Aditya Chouhan
 
 #### Project Name: Social promotion of your business
 
-Build a wrapper service using Twython API https://github.com/ryanmcgrath/twython to automatically handle tweets, search and retweets etc.. This service will read latest marketing images(with some texts) from a repository, could be google image store or box or something. service will also read latest blurbs (text with links) from a NOSQL database (couchdb)  or something.
+Build a wrapper service using Twython API https://github.com/ryanmcgrath/twython to automatically handle tweets, search and retweets etc.. This service will read latest marketing images(with some texts) from a repository, could be google image store or box or something. service will also read latest blurbs (text with links) from a NOSQL database (mongoDB)  or something.
 
 Persona/Use cases:
 
@@ -23,4 +23,18 @@ The app interface provides people in an organization to subscribe. You could giv
 
 uses app interface to  easily upload the tweet blurbs and images they create on daily basis.
 
-Talk to me if you have questions 
+
+## Technologies Used:
+* UI Front-end – React JS ,Material UI
+* Storage - MongoDB
+* Image Storage - Firebase
+* Back-end – Flask/ Python
+* Twython API to connect to Twitter
+
+##Design Flow for Use cases:
+
+<img src ="https://raw.githubusercontent.com/SJSU272LabSP18/Project-Team-19/master/Project%20Documentation/Design%20Flow-%20Marketing%20Team.jpeg">
+
+
+
+
