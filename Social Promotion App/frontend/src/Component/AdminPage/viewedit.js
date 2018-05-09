@@ -88,6 +88,7 @@ class Viewedit extends Component {
             btnText='Delete'
             btnContextual='btn-danger'
             //className='my-custom-class'
+			style={{backgroundColor :'#d9534f'}}
             onClick={ e => this.handleDeleteButtonClick(onClick) }/>
         );
     }    
