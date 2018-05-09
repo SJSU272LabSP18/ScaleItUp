@@ -8,8 +8,8 @@ class Dashboard extends Component {
     super();
     this.state = {data: {
   columns: [
-    ['Tweets', 0],
-    ['Images', 0]
+    ['Tweets', 9],
+    ['Images', 19]
   ],
   type : 'bar'
 }};
