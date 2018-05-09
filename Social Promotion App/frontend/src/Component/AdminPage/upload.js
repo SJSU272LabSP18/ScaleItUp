@@ -133,7 +133,7 @@ class Upload extends Component {
       .catch(err => console.log(err))
   }
   editTweet(index) {
-      var dataID = $('#prodId').val();   //this.state.pyImage[index -1]['_id']
+      var dataID = this.state.pyImage[index -1]['_id']
       var tweet = $('#txtInput').html(); //this.state.pyImage[index -1]['tweet']
       var data = {'_id': dataID,'tweet':tweet}
       console.log(data)
