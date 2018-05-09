@@ -96,7 +96,24 @@ class Retweet extends Component {
 
     let it = this.state.results.map((tweet) => {
       return (
-        <div className="media text-muted pt-3">
+	  
+	   <div className="col-md-4 col-sm-4 price-box price-box--blue">
+          <div style={{ marginTop: '6%', backgroundColor: '#fff', borderRadius: '6px', boxShadow: '0 4px 8px 0px rgba(0,0,0,0.2)', padding: '35px 35px 40px 35px', display:'block', height : '265px' }}>
+		  <div>
+		  <img src={tweet.avatar} data-holder-rendered="true" style={{ maxHeight: '140px', maxWidth: '260px' }} className="img-fluid rounded"></img>
+		  </div>
+		  <div>
+		   <a style={{display : 'block'}} href={"http://www.twitter.com/" + tweet.user}>{tweet.author}</a>
+            <strong>
+             {tweet.text}
+            </strong> 
+		  </div>
+		  <button style={{ borderRadius: '0px', height: '41px', width: '113px',marginTop: '4%'}} id={tweet.id} className="btn btn-info btn-md" onClick={() => this.handleRetweet(tweet.id)}>
+                <span className="glyphicon glyphicon-retweet"></span> Retweet
+               </button>
+		  </div>
+		  </div>
+        /*<div className="media text-muted pt-3">
           <img src={tweet.avatar} data-holder-rendered="true" />
           <p className="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
             <a href={"http://www.twitter.com/" + tweet.user}>{tweet.author}</a>
@@ -112,7 +129,7 @@ class Retweet extends Component {
                 <span className="glyphicon glyphicon-retweet"></span> Retweet
                </button>
           </div>
-        </div>
+        </div>*/
 
       )
     })
@@ -124,10 +141,9 @@ class Retweet extends Component {
           <form onSubmit={this.getSearch}>
             <h1 text-align='center'>Retweets</h1>
             <input className="form-control" id="search_q" name="q" type="text" value={this.state.value} onChange={this.handleChange} placeholder="Search for a topic, full name, or username" />
-            <input className="btn btn-info" id="search_submit" type="submit" value="Search" />
+            <input style={{marginTop : '1%'}} className="btn btn-info" id="search_submit" type="submit" value="Search" />
           </form>
-        <div className="my-3 p-3 bg-red rounded box-shadow">
-          <h6 className="border-bottom border-gray pb-2 mb-0">Recent Search</h6>
+        <div className="row row--margin">
           {it}
         </div>
       </div>
