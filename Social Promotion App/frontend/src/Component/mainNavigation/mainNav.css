@@ -1,0 +1,11 @@
+.item-footer {
+    display: table;
+    font-size: 12px;
+    padding-top: 1px;
+}
+.IconContainer {
+    display: inline-block;
+    line-height: 0;
+    position: relative;
+    vertical-align: middle;
+}
