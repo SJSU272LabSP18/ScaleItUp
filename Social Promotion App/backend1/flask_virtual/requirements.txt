@@ -1,0 +1,12 @@
+python3.6
+flask
+twython
+sys
+flask_cors
+pymongo
+pillow
+bson
+urllib
+google-api-python-client
+flask_dance
+
