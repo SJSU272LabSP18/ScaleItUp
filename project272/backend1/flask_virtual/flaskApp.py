@@ -218,7 +218,17 @@ def search():
 def uploadImage():
     tweet = request.json['tweet']
     imageURL = request.json['image']
-    db.image.insert({'tweet': tweet, 'image': imageURL,'createdat':datetime.now()})
+    result = db.image.insert({'tweet': tweet, 'image': imageURL,'createdat':datetime.now()})
+    no = db.image.find().count()
+    _id = json.dumps(result, default=json_util.default) 
+    return json.dumps({'_id': _id, 'id': no,'image':imageURL,'tweet':tweet})
+
+@app.route('/image/update',methods=['POST'])
+def updateImage():
+    id = request.json['_id']
+    _id = json.loads(id, object_hook=json_util.object_hook)
+    tweet = request.json['tweet']
+    db.image.update({'_id':_id}, { '$set': {'tweet':tweet, 'modifiedat':datetime.now()}},upsert=False)
     return json.dumps({'msg':"success"})
 
 @app.route('/delete/tweet',methods=['DELETE'])
@@ -238,7 +248,7 @@ def getImage():
         dImage.append({'_id':_id, 'id':i+1, 'tweet': d['tweet'], 'image': d['image']})
     return json.dumps(dImage)
 
-@app.route('/delete/tweet',methods=['DELETE'])
+@app.route('/image/delete',methods=['DELETE'])
 def deleteImage():
     _id = request.json['data']
     _id1 = json.loads(_id, object_hook=json_util.object_hook)

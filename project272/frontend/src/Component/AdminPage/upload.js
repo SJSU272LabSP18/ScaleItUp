@@ -32,6 +32,7 @@ class Upload extends Component {
     this.uploadHandler = this.uploadHandler.bind(this)
     this.handleChange = this.handleChange.bind(this);
     this.getImages = this.getImages.bind(this)
+    this.editTweet = this.editTweet.bind(this)
   }
   componentWillMount() {
       fetch(config.baseURL + '/image/get', {
@@ -64,10 +65,8 @@ class Upload extends Component {
   }
   uploadHandler = (e) => {
     e.preventDefault();
-    
-    console.log(this.state.input);
     var tweet = this.state.input
-  
+    var data = this.state.pyImage
     if (this.state.selectedFile != null) {
       var storageRef = firebase.storage().ref('/cmpe272/' + this.state.selectedFile.name);
       var uploadTask = storageRef.put(this.state.selectedFile)
@@ -93,21 +92,20 @@ class Upload extends Component {
         })
           .then(r => r.json())
           .then(r => Array.from(Object.keys(r), k => r[k])
-          )
-          .then(r => {
-            this.setState({
-              message: r
-            })
-          })
+          ).then(r=> {
+            console.log(r)
+          }) 
           .catch(err => console.log(err))
           notify.show("Image uploaded successfully", "success", 5000, "#FF0000")
-        })
-    
-    } else {
+      }      
+    )
+    }
+    else {
       notify.show("Please select a image file", "error", 5000, "#FF0000")
     }
   }
-  getImages(){
+
+  getImages() {
     fetch(config.baseURL + '/image/get', {
       method: 'GET',
       mode: 'cors',
@@ -122,18 +120,24 @@ class Upload extends Component {
       )
       .then(r => {
         console.log(r)
-        this.setState({
-          pyImage: r,
-        })
+        let pyImage = this.state.pyImage.push(post =>{
+            return post
+        
+      })
+        this.setState(state => {
+          state.pyImage= r;
+          return state;
+      }).bind(this);
       })
       .catch(err => console.log(err))
   }
-  deleteImage(el){
-      var imageID = this.state.pyImage[el-1]['_id']
-      var data = {"data": imageID};
-      data = JSON.stringify(data);
-      console.log(data);
-      fetch(config.baseURL + '/image/tweet', {
+  editTweet(index) {
+      var dataID = $('#prodId').val();   //this.state.pyImage[index -1]['_id']
+      var tweet = $('#txtInput').html(); //this.state.pyImage[index -1]['tweet']
+      var data = {'_id': dataID,'tweet':tweet}
+      console.log(data)
+      data = JSON.stringify(data)
+      fetch(config.baseURL + '/image/update', {
         method: 'POST',
         mode: 'cors',
         body: data,
@@ -152,13 +156,39 @@ class Upload extends Component {
           })
         })
         .catch(err => console.log(err))
-        .then(r => {
-          if (this.state.message[0] != "") {
-            notify.show(this.state.message[0], "success", 5000, "#008000")
-          } else if (this.state.message[1] != "") {
-            notify.show(this.state.message[1], "error", 5000, "#FF0000")
-          }
+        notify.show("Tweet updated successfully", "success", 5000, "#FF0000")
+  }
+  deleteImage(el){
+      var imageID = this.state.pyImage[el-1]['_id']
+      var id = this.state.pyImage[el-1]['id']
+      var data = {"data": imageID};
+      data = JSON.stringify(data);
+      console.log(data);
+      fetch(config.baseURL + '/image/delete', {
+        method: 'DELETE',
+        mode: 'cors',
+        body: data,
+        dataType: 'json',
+        headers: ({
+          "Access-Control-Allow-Origin": "*",
+          'Content-Type': "application/json"
         })
+      })
+        .then(r => r.json())
+        .then(r => Array.from(Object.keys(r), k => r[k])
+        )
+        .then(r => {
+          let pyImage = this.state.pyImage.filter((post) => {
+            return id !== post.id;
+        });
+        this.setState(state => {
+          state.pyImage= pyImage;
+          return state;
+      }).bind(this);
+        })
+        .catch(err => console.log(err))
+        notify.show("Image Deleted Successfully", "success", 5000, "#008000")
+        
   }
   render() {
     $(function(e) {
@@ -178,13 +208,11 @@ class Upload extends Component {
         //var value = document.getElementById("p").innerText;
         var value = $('#txtInput').html()
         //console.log(value)
-        var index = $('input').val();
-        $('#p'+index).html(value);
+        var index = $('#prodId').val();
+        $('#p'+index).html(value);          
         //$('#myModal').modal('hide');
       });
-    });
-  
-      
+    });   
     let it = this.state.pyImage.map((product) => {
       return (
         <div className="col-lg-4 col-md-4 col-sm-4 col-xs-4">
@@ -210,7 +238,7 @@ class Upload extends Component {
                             <input id="prodId" name="prodId" type="hidden"></input>
                             </div>
                             <div className="modal-footer">
-                            <button id="btnSave" type="button" class="btn btn-default" data-dismiss="modal">Save changes</button>
+                            <button id="btnSave" type="button" class="btn btn-default" data-dismiss="modal" onClick = {() =>this.editTweet(document.getElementById("prodId").value)}>Save changes</button>
                             </div>
                           </div>
 
@@ -245,11 +273,11 @@ class Upload extends Component {
           </form>
           <div className="row mb-3">
             {it}
+            {this.renderImage}
           </div>
         </div>
       </div>
     );
   }
 }
-
 export default Upload;
