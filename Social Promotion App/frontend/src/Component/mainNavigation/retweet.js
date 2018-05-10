@@ -35,7 +35,7 @@ class Retweet extends Component {
         mode: 'cors',
         dataType: 'json',
         headers: ({
-          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Origin": "https://team-project-272.herokuapp.com",
           'Content-Type': "application/json"
         })
       })
