@@ -67,3 +67,6 @@ We have used React JS and Material UI to design user interface. We have integrat
 * Project Documentation – All the Design diagrams , Presentation and Test documents are available here.
 * Social Promotion App – All the codes are present in this folder. More details can be found out in README section of this folder.
 * Social Promotion of your Business_T19.pdf – This file was submitted as part of initial design documents.
+
+### Demo Link on Youtube
+* <a href="https://youtu.be/Z7XPn7tGI18" target="_blank">Click Here to Watch</a>

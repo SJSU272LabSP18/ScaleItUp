@@ -58,9 +58,9 @@ class Signin extends Component {
   <h2 class="row__sub">Please select an account to Sign In</h2>
 </div>
 <div class="row row--center row--margin">
-  <div class="col-md-6 col-sm-6 price-box price-box--purple">
+  <div class="col-md-6 col-sm-6 price-box">
     <div class="price-box__wrap">
-      <div class="price-box__img"></div>
+      <div class="price-box__img"><i style={{fontSize: '10em', color: '#8a3aff'}} class="fa fa-user"></i></div>
       <h1 class="price-box__title">
         Admin Login
       </h1>
@@ -71,9 +71,9 @@ class Signin extends Component {
   </div>
   </div>
  
-  <div class="col-md-6 col-sm-6 price-box price-box--blue">
+  <div class="col-md-6 col-sm-6 price-box">
   <div class="price-box__wrap">
-      <div class="price-box__img "></div>
+      <div class="price-box__img "><i style={{fontSize: '10em', color: '#63b2fc'}} class="fa fa-twitter"></i></div>
       <h1 class="price-box__title">
          Log In with Twitter
       </h1>
