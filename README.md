@@ -54,6 +54,24 @@ Scaleit.up is a seamless way to tweet to twitter using just your Twitter Account
 
 We have used React JS and Material UI to design user interface. We have integrated our server flask/python via Rest API. Flask/Python server interacts with MongoDB database and updates, pull and delete data from the database. Flask/Python also pushes new tweets, image tweets, search tweets and re-tweets using Twython API.
 
+##Deployment in Cloud (Heroku and AWS):
+
+#Design
+
+<img src ="https://github.com/SJSU272LabSP18/Project-Team-19/blob/master/Project%20Documentation/272%20Cloud%20Deployment.jpeg">
+
+The frontend is deployed in a secure HTTPS connection in heroku and the backend is deployed in AWS EC2 instance. Since AWS does not support free HTTPS certificate, there ia certificate issue when accessing via Browser. Please enable to “Load unsafe script as shown below in screenshot to run our application in Cloud.
+
+Cloud link to access the app:
+* <a href="https://team-project-272.herokuapp.com" target="_blank">https://team-project-272.herokuapp.com</a>
+
+Marketing Admin Team Credentials to login in to add, update and delete tweets and images:
+username: aditya
+password: sunil
+
+
+<img src ="https://github.com/SJSU272LabSP18/Project-Team-19/blob/master/How%20to%20configure%20to%20run%20on%20Cloud.png">
+
 ## Challenges Faced:
 
 * Understanding and using Twython API
