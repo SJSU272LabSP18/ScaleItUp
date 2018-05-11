@@ -54,9 +54,9 @@ Scaleit.up is a seamless way to tweet to twitter using just your Twitter Account
 
 We have used React JS and Material UI to design user interface. We have integrated our server flask/python via Rest API. Flask/Python server interacts with MongoDB database and updates, pull and delete data from the database. Flask/Python also pushes new tweets, image tweets, search tweets and re-tweets using Twython API.
 
-##Deployment in Cloud (Heroku and AWS):
+## Deployment in Cloud (Heroku and AWS):
 
-#Design
+# Design
 
 <img src ="https://github.com/SJSU272LabSP18/Project-Team-19/blob/master/Project%20Documentation/272%20Cloud%20Deployment.jpeg">
 
